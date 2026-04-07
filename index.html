@@ -36,25 +36,61 @@
   --base-font:13px;
   --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
 }
-/* Tema Azul */
 :root.tema-azul{--accent:#2563EB;--accent-dk:#1D4ED8;--accent-nav:#1E3A8A;--accent-light:#EFF6FF;--accent-light-border:#93C5FD;--accent-text:#1E3A8A;--accent-text2:#1D4ED8;}
-/* Tema Café */
 :root.tema-cafe{--accent:#92400E;--accent-dk:#78350F;--accent-nav:#78350F;--accent-light:#FEF3C7;--accent-light-border:#D97706;--accent-text:#78350F;--accent-text2:#92400E;}
-/* Tema Oscuro */
 :root.tema-oscuro{
   --accent:#1D9E75;--accent-dk:#0F6E56;--accent-nav:#0A2E22;--accent-light:#0A2E22;--accent-light-border:#1D9E75;--accent-text:#9FE1CB;--accent-text2:#6DCFB2;
   --color-background-primary:#1C1C1E;--color-background-secondary:#2C2C2E;--color-background-tertiary:#111110;
   --color-text-primary:#F5F5F0;--color-text-secondary:#9A9990;--color-border-tertiary:#3A3A3C;--color-border-secondary:#48484A;
 }
 
-/* ===== Reset ===== */
 *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font-sans);-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--accent)}
 body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);font-size:var(--base-font)}
 
+/* ===== LOGIN SCREEN ===== */
+#login-screen{
+  position:fixed;inset:0;background:var(--accent);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:1000;padding:32px;
+}
+#login-screen.hidden{display:none}
+.login-logo{width:80px;height:80px;background:rgba(255,255,255,.15);border-radius:24px;
+  display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:20px}
+.login-title{color:#fff;font-size:24px;font-weight:600;margin-bottom:6px;text-align:center}
+.login-sub{color:rgba(255,255,255,.7);font-size:14px;margin-bottom:36px;text-align:center}
+.btn-google{display:flex;align-items:center;gap:12px;background:#fff;color:#1A1916;
+  border:none;border-radius:12px;padding:14px 24px;font-size:15px;font-weight:500;
+  cursor:pointer;width:100%;max-width:320px;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.btn-google:hover{background:#f5f5f3}
+.btn-google:active{background:#e8e8e6}
+.btn-google svg{flex-shrink:0}
+.login-note{color:rgba(255,255,255,.5);font-size:11px;margin-top:20px;text-align:center;max-width:280px;line-height:1.5}
+.login-loading{color:#fff;font-size:14px;display:none}
+
+/* ===== SYNC BADGE ===== */
+#sync-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,.15);border-radius:99px;
+  padding:3px 8px;font-size:10px;color:rgba(255,255,255,.8);
+  transition:background .2s;
+}
+#sync-badge.syncing{background:rgba(255,255,255,.25)}
+#sync-badge.error{background:rgba(239,68,68,.4)}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6)}
+#sync-badge.syncing .sync-dot{background:#fff;animation:pulse 1s infinite}
+#sync-badge.error .sync-dot{background:#fca5a5}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ===== USER AVATAR ===== */
+.user-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.4);cursor:pointer}
+.user-avatar-placeholder{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;
+  color:#fff;cursor:pointer;border:2px solid rgba(255,255,255,.4)}
+
 /* ===== Shell ===== */
 .app{background:var(--color-background-tertiary);width:100%;max-width:480px;min-height:100dvh;display:flex;flex-direction:column;overflow:hidden;position:relative}
-.header{background:var(--accent);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.header{background:var(--accent);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .header-title{color:#fff;font-size:16px;font-weight:500}
 .header-sub{color:rgba(255,255,255,.7);font-size:12px}
 .header-right{display:flex;align-items:center;gap:8px}
@@ -70,7 +106,6 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 .content{padding:16px;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .section{display:none}.section.active{display:block}
 
-/* ===== Metric cards ===== */
 .metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
 .metric-card{background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:12px;border:0.5px solid var(--color-border-tertiary);text-align:center}
 .metric-val{font-size:22px;font-weight:500;color:var(--color-text-primary)}
@@ -80,10 +115,7 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 .mc-blue{background:#E6F1FB;border-color:#85B7EB}.mc-blue .metric-val{color:#0C447C}.mc-blue .metric-lbl{color:#185FA5}
 .mc-purple{background:#EEEDFE;border-color:#AFA9EC}.mc-purple .metric-val{color:#3C3489}.mc-purple .metric-lbl{color:#534AB7}
 
-/* ===== Typography ===== */
 .section-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px}
-
-/* ===== Hato grid ===== */
 .cow-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
 .cow-card{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:12px;cursor:pointer}
 .cow-card:hover{border-color:var(--color-border-secondary)}
@@ -93,10 +125,8 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 .cow-arete{font-size:11px;color:var(--color-text-secondary)}
 .cow-stat{display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-top:4px}
 .cow-stat span{color:var(--color-text-primary);font-weight:500}
-/* Producción chip en la tarjeta */
 .prod-chip{display:inline-flex;align-items:center;gap:4px;margin-top:6px;background:var(--accent-light);border-radius:99px;padding:2px 8px;font-size:11px;color:var(--accent-text);font-weight:500}
 
-/* ===== Badges ===== */
 .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px}
 .badge-active{background:#EAF3DE;color:#27500A}
 .badge-dry{background:#FAEEDA;color:#633806}
@@ -105,7 +135,6 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 .badge-lact{background:#EEEDFE;color:#3C3489}
 .badge-otro{background:#F1EFE8;color:#444441}
 
-/* ===== Buttons ===== */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);font-size:13px;cursor:pointer}
 .btn:hover{background:var(--color-background-secondary)}
 .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -121,11 +150,9 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 .btn-backup:hover{background:#CECBF6}
 .btn-sm{padding:5px 10px;font-size:12px}
 
-/* ===== Layout ===== */
 .row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:16px 0}
 
-/* ===== Charts ===== */
 .chart-wrap{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:16px;margin-bottom:16px}
 .chart-title{font-size:13px;color:var(--color-text-secondary);margin-bottom:4px}
 .chart-sub{font-size:11px;color:var(--color-text-secondary);margin-bottom:12px}
@@ -138,7 +165,6 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 .trend-up{color:#27500A;font-size:11px}
 .trend-down{color:#791F1F;font-size:11px}
 
-/* ===== Forms ===== */
 .form-group{margin-bottom:11px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .form-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;display:block}
@@ -147,7 +173,6 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 .inline-form{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:2px solid var(--accent);padding:16px;margin-bottom:16px}
 .inline-form-title{font-size:13px;font-weight:500;color:var(--accent-dk);margin-bottom:12px;display:flex;align-items:center;gap:6px}
 
-/* ===== Vet cards ===== */
 .vet-card{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:12px;margin-bottom:10px}
 .vet-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
 .vet-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
@@ -157,7 +182,6 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 .delete-btn{color:var(--color-text-secondary);background:none;border:none;cursor:pointer;font-size:12px;padding:2px 6px;border-radius:4px}
 .delete-btn:hover{background:#FCEBEB;color:#791F1F}
 
-/* ===== Modals ===== */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;z-index:100;padding-top:calc(env(safe-area-inset-top) + 16px)}
 .modal-bg.open{display:flex}
 .modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);width:100%;max-width:380px;padding:20px;margin:auto}
@@ -167,18 +191,15 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 .detail-key{color:var(--color-text-secondary)}
 .detail-val{color:var(--color-text-primary);font-weight:500}
 
-/* ===== Tabs ===== */
 .tab-strip{display:flex;gap:4px;margin-bottom:14px;background:var(--color-background-secondary);padding:4px;border-radius:var(--border-radius-md)}
 .tab-btn{flex:1;padding:7px 8px;font-size:12px;font-weight:500;border:none;background:transparent;color:var(--color-text-secondary);border-radius:6px;cursor:pointer}
 .tab-btn.active{background:var(--color-background-primary);color:var(--color-text-primary);border:0.5px solid var(--color-border-tertiary)}
 
-/* ===== Reports ===== */
 .report-card{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:16px;margin-bottom:12px}
 .report-card-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
 .report-card-desc{font-size:12px;color:var(--color-text-secondary);margin-bottom:12px}
 .export-row{display:flex;gap:8px;flex-wrap:wrap}
 
-/* ===== Configuración swatches ===== */
 .theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
 .theme-swatch{border-radius:var(--border-radius-md);padding:10px 4px;text-align:center;cursor:pointer;border:2px solid transparent;transition:border-color .15s}
 .theme-swatch.selected{border-color:var(--accent)}
@@ -188,23 +209,76 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 .font-opt{flex:1;padding:8px;border-radius:var(--border-radius-md);border:1.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;text-align:center}
 .font-opt.selected{border-color:var(--accent);background:var(--accent-light);color:var(--accent-text);font-weight:500}
 
-/* ===== Table ===== */
 .entrega-table{width:100%;border-collapse:collapse;font-size:12px}
 .entrega-table th{text-align:left;padding:7px 8px;font-weight:500;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap}
 .entrega-table td{padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
 .entrega-table tr:last-child td{border:none}
 .entrega-table tr:hover td{background:var(--color-background-secondary)}
 
-/* ===== Install banner ===== */
+/* ===== DASHBOARD VISUAL ===== */
+.dash-greeting{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary)}
+.dash-section-label{font-size:11px;font-weight:700;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.8px;margin:14px 0 8px}
+.dash-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
+.dash-card{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:14px 12px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;cursor:default;transition:transform .1s}
+.dash-card:active{transform:scale(.97)}
+.dash-icon{width:56px;height:56px;margin-bottom:4px;align-self:center}
+.dash-card-val{font-size:26px;font-weight:700;line-height:1;color:var(--color-text-primary)}
+.dash-card-lbl{font-size:11px;color:var(--color-text-secondary);font-weight:500}
+.dash-card-green{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#bbf7d0}
+.dash-card-green .dash-card-val{color:#15803d}
+.dash-card-amber{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a}
+.dash-card-amber .dash-card-val{color:#92400e}
+.dash-card-blue{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#bfdbfe}
+.dash-card-blue .dash-card-val{color:#1d4ed8}
+.dash-card-purple{background:linear-gradient(135deg,#faf5ff,#ede9fe);border-color:#ddd6fe}
+.dash-card-purple .dash-card-val{color:#6d28d9}
+.dash-card-pink{background:linear-gradient(135deg,#fdf2f8,#fce7f3);border-color:#f9a8d4}
+.dash-card-pink .dash-card-val{color:#be185d}
+.dash-card-teal{background:linear-gradient(135deg,#f0fdfa,#ccfbf1);border-color:#99f6e4}
+.dash-card-teal .dash-card-val{color:#0d9488}
+
+/* ===== PHOTO PICKER ===== */
+.photo-picker{border:1.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:16px;text-align:center;cursor:pointer;background:var(--color-background-secondary);transition:border-color .15s;overflow:hidden;min-height:90px;display:flex;align-items:center;justify-content:center}
+.photo-picker:hover{border-color:var(--accent)}
+.photo-preview-empty{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--color-text-secondary);font-size:12px}
+.photo-preview-empty svg{opacity:.5}
+.photo-preview-img{width:100%;max-height:160px;object-fit:cover;border-radius:8px;display:block}
+
+/* ===== COW CARD con foto ===== */
+.cow-photo{width:100%;height:80px;object-fit:cover;border-radius:8px 8px 0 0;margin:-12px -12px 8px -12px;width:calc(100% + 24px)}
+
+/* ===== FICHA VACA foto ===== */
+.cow-detail-photo{width:100%;height:160px;object-fit:cover;border-radius:var(--border-radius-md);margin-bottom:12px}
+
 #install-banner{display:none;position:fixed;bottom:env(safe-area-inset-bottom,0);left:0;right:0;background:var(--accent-dk);color:#fff;padding:14px 16px;z-index:200;flex-direction:column;gap:8px}
 #install-banner p{font-size:13px;line-height:1.4}
 #install-banner .banner-row{display:flex;gap:8px;align-items:center}
 #install-banner button{padding:8px 14px;border-radius:8px;border:none;cursor:pointer;font-size:13px}
 #install-banner .btn-ok{background:var(--accent);color:#fff}
 #install-banner .btn-close{background:rgba(255,255,255,.15);color:#fff}
+
+/* User menu modal */
+#modal-user .modal{max-width:300px;text-align:center}
+.user-menu-avatar{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;object-fit:cover}
+.user-menu-avatar-ph{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:600;color:var(--accent-text)}
+.user-menu-name{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.user-menu-email{font-size:12px;color:var(--color-text-secondary);margin-bottom:20px}
 </style>
 </head>
 <body>
+
+<!-- ===== PANTALLA DE LOGIN ===== -->
+<div id="login-screen">
+  <div class="login-logo">🌿</div>
+  <div class="login-title">Finca Santa Rosa</div>
+  <div class="login-sub">Gestión ganadera familiar</div>
+  <button class="btn-google" onclick="signInWithGoogle()">
+    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.2l6.8-6.8C35.7 2.2 30.2 0 24 0 14.8 0 7 5.4 3.2 13.3l7.9 6.1C13 13.8 18.1 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.1z"/><path fill="#FBBC05" d="M11.1 28.5A14.8 14.8 0 0 1 9.5 24c0-1.6.3-3.1.7-4.5L2.3 13.4A23.9 23.9 0 0 0 0 24c0 3.8.9 7.4 2.4 10.6l8.7-6.1z"/><path fill="#34A853" d="M24 48c6.2 0 11.4-2 15.2-5.5l-7.6-5.9c-2 1.4-4.7 2.2-7.6 2.2-5.9 0-10.9-4-12.7-9.3l-8.7 6.1C7 42.6 14.8 48 24 48z"/></svg>
+    Continuar con Google
+  </button>
+  <div class="login-loading" id="login-loading">Iniciando sesión…</div>
+  <div class="login-note">Solo los miembros con cuenta de Google autorizados pueden acceder a los datos de la finca.</div>
+</div>
 
 <div id="install-banner">
   <p>📲 <strong>Instalar en tu iPhone:</strong> toca <strong>Compartir</strong> ( ⬆ ) en Safari y luego <em>"Agregar a pantalla de inicio"</em>.</p>
@@ -223,9 +297,13 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
     <div class="header-sub" id="hdr-sub">Cargando…</div>
   </div>
   <div class="header-right">
+    <div id="sync-badge"><div class="sync-dot"></div><span id="sync-txt">En línea</span></div>
     <div class="header-badge">
       <div class="header-badge-lbl">hoy</div>
       <div class="header-badge-val" id="hdr-total">— L</div>
+    </div>
+    <div id="user-avatar-wrap" onclick="openModal('modal-user')" style="cursor:pointer">
+      <div class="user-avatar-placeholder" id="user-initials">?</div>
     </div>
     <button class="btn-config" onclick="openModal('modal-config')" title="Configuración">
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 13a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="1.5"/><path d="M17.66 10.31a1 1 0 00.2-1.09l-1.06-2.57a1 1 0 00-1-.6l-1.45.14a6.02 6.02 0 00-.74-.74l.14-1.45a1 1 0 00-.6-1L10.78 1.94a1 1 0 00-1.09.2l-1.06 1.06a6.15 6.15 0 00-1.04 0L6.53 2.14a1 1 0 00-1.09-.2L2.87 3a1 1 0 00-.6 1l.14 1.45a6.02 6.02 0 00-.74.74L.22 6.05a1 1 0 00-.2 1.09l1.06 2.57a1 1 0 001 .6l1.45-.14c.23.26.48.51.74.74L4.13 12.36a1 1 0 00.6 1l2.57 1.06a1 1 0 001.09-.2l1.06-1.06c.34.02.7.02 1.04 0l1.06 1.06a1 1 0 001.09.2l2.57-1.06a1 1 0 00.6-1l-.14-1.45c.26-.23.51-.48.74-.74l1.45.14a1 1 0 001-.6l1.06-2.57z" stroke="currentColor" stroke-width="1.5"/></svg>
@@ -248,20 +326,187 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 
 <!-- ===== TABLERO ===== -->
 <div class="section active" id="sec-dashboard">
-  <div class="metric-grid">
-    <div class="metric-card mc-green"><div class="metric-val" id="dash-activas">—</div><div class="metric-lbl">Activos</div></div>
-    <div class="metric-card mc-green"><div class="metric-val" id="dash-hoy">—</div><div class="metric-lbl">Litros hoy</div></div>
-    <div class="metric-card mc-amber"><div class="metric-val" id="dash-secas">—</div><div class="metric-lbl">Vacas secas</div></div>
-    <div class="metric-card mc-blue"><div class="metric-val" id="dash-prenadas">—</div><div class="metric-lbl">Preñadas</div></div>
+
+  <!-- Saludo finca -->
+  <div class="dash-greeting">
+    <div class="dash-greeting-text">
+      <div id="dash-finca-nombre" style="font-size:15px;font-weight:600;color:var(--color-text-primary)">Finca Santa Rosa</div>
+      <div id="dash-fecha-turno" style="font-size:12px;color:var(--color-text-secondary);margin-top:2px"></div>
+    </div>
   </div>
+
+  <!-- Sección HATO -->
+  <div class="dash-section-label">🐄 HATO</div>
+  <div class="dash-card-grid">
+
+    <div class="dash-card dash-card-green" onclick="showSection('hato',document.querySelector('.nav-btn:nth-child(2)'))">
+      <svg class="dash-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="32" cy="38" rx="18" ry="13" fill="#4ade80" opacity=".25"/>
+        <ellipse cx="32" cy="36" rx="14" ry="10" fill="#22c55e" opacity=".4"/>
+        <!-- cuerpo vaca -->
+        <rect x="16" y="28" width="32" height="18" rx="9" fill="#15803d"/>
+        <!-- cabeza -->
+        <ellipse cx="44" cy="26" rx="8" ry="7" fill="#15803d"/>
+        <!-- oreja -->
+        <ellipse cx="50" cy="22" rx="3" ry="4" fill="#16a34a" transform="rotate(20 50 22)"/>
+        <!-- ojo -->
+        <circle cx="46" cy="24" r="1.5" fill="#fff"/>
+        <circle cx="46.5" cy="24" r=".7" fill="#1a1916"/>
+        <!-- hocico -->
+        <ellipse cx="51" cy="29" rx="3.5" ry="2.5" fill="#4ade80" opacity=".7"/>
+        <circle cx="50" cy="29" r=".7" fill="#15803d"/>
+        <circle cx="52" cy="29" r=".7" fill="#15803d"/>
+        <!-- patas -->
+        <rect x="19" y="43" width="5" height="9" rx="2.5" fill="#15803d"/>
+        <rect x="27" y="43" width="5" height="9" rx="2.5" fill="#15803d"/>
+        <rect x="35" y="43" width="5" height="9" rx="2.5" fill="#15803d"/>
+        <rect x="41" y="43" width="5" height="9" rx="2.5" fill="#15803d"/>
+        <!-- manchas -->
+        <ellipse cx="25" cy="33" rx="5" ry="4" fill="#fff" opacity=".2"/>
+        <ellipse cx="36" cy="36" rx="4" ry="3" fill="#fff" opacity=".15"/>
+        <!-- cola -->
+        <path d="M16 33 Q8 28 10 22" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <circle cx="10" cy="21" r="2.5" fill="#4ade80" opacity=".6"/>
+      </svg>
+      <div class="dash-card-val" id="dash-activas">—</div>
+      <div class="dash-card-lbl">Vacas presentes</div>
+    </div>
+
+    <div class="dash-card dash-card-purple">
+      <svg class="dash-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- botella leche -->
+        <rect x="22" y="20" width="20" height="30" rx="6" fill="#a78bfa" opacity=".35"/>
+        <rect x="24" y="22" width="16" height="26" rx="5" fill="#7c3aed" opacity=".5"/>
+        <!-- tapa -->
+        <rect x="26" y="14" width="12" height="8" rx="3" fill="#6d28d9"/>
+        <!-- brillo -->
+        <rect x="27" y="24" width="4" height="12" rx="2" fill="#fff" opacity=".3"/>
+        <!-- leche -->
+        <rect x="24" y="34" width="16" height="12" rx="0 0 5 5" fill="#ede9fe" opacity=".6"/>
+        <!-- gotas -->
+        <ellipse cx="20" cy="42" rx="3" ry="4" fill="#7c3aed" opacity=".4"/>
+        <ellipse cx="44" cy="38" rx="2" ry="3" fill="#7c3aed" opacity=".3"/>
+      </svg>
+      <div class="dash-card-val" id="dash-lactantes">—</div>
+      <div class="dash-card-lbl">Vacas lactantes</div>
+    </div>
+
+    <div class="dash-card dash-card-amber">
+      <svg class="dash-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- luna / descanso -->
+        <circle cx="32" cy="32" r="18" fill="#fbbf24" opacity=".2"/>
+        <path d="M38 18 A16 16 0 1 0 46 38 A10 10 0 1 1 38 18Z" fill="#d97706" opacity=".7"/>
+        <!-- zzz -->
+        <text x="32" y="28" text-anchor="middle" font-size="10" fill="#92400e" font-weight="700" opacity=".8">z</text>
+        <text x="36" y="22" text-anchor="middle" font-size="8" fill="#92400e" font-weight="700" opacity=".6">z</text>
+        <text x="40" y="17" text-anchor="middle" font-size="6" fill="#92400e" font-weight="700" opacity=".4">z</text>
+        <!-- vaca durmiendo -->
+        <ellipse cx="32" cy="42" rx="12" ry="7" fill="#d97706" opacity=".5"/>
+        <circle cx="42" cy="38" r="5" fill="#d97706" opacity=".5"/>
+      </svg>
+      <div class="dash-card-val" id="dash-secas">—</div>
+      <div class="dash-card-lbl">Vacas secas</div>
+    </div>
+
+    <div class="dash-card dash-card-pink">
+      <svg class="dash-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- figura embarazada -->
+        <circle cx="32" cy="20" r="9" fill="#f472b6" opacity=".6"/>
+        <!-- cuerpo redondo -->
+        <ellipse cx="32" cy="38" rx="13" ry="16" fill="#ec4899" opacity=".5"/>
+        <!-- bebé dentro -->
+        <ellipse cx="32" cy="40" rx="7" ry="8" fill="#fce7f3" opacity=".5"/>
+        <circle cx="32" cy="40" r="4" fill="#f9a8d4" opacity=".6"/>
+        <!-- corazón -->
+        <path d="M30 39 C30 37 28 36 28 38 C28 40 30 42 32 44 C34 42 36 40 36 38 C36 36 34 37 34 39 C34 37 30 37 30 39Z" fill="#be185d" opacity=".7"/>
+      </svg>
+      <div class="dash-card-val" id="dash-prenadas">—</div>
+      <div class="dash-card-lbl">Hembras preñadas</div>
+    </div>
+
+    <div class="dash-card dash-card-teal">
+      <svg class="dash-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- novilla joven -->
+        <ellipse cx="32" cy="40" rx="14" ry="9" fill="#14b8a6" opacity=".3"/>
+        <rect x="18" y="32" width="28" height="14" rx="7" fill="#0d9488" opacity=".5"/>
+        <ellipse cx="42" cy="30" rx="7" ry="6" fill="#0d9488" opacity=".5"/>
+        <!-- estrella joven -->
+        <path d="M32 14 L33.5 19 L38.5 19 L34.5 22 L36 27 L32 24 L28 27 L29.5 22 L25.5 19 L30.5 19Z" fill="#2dd4bf" opacity=".7"/>
+        <circle cx="32" cy="14" r="2" fill="#5eead4"/>
+      </svg>
+      <div class="dash-card-val" id="dash-novillas">—</div>
+      <div class="dash-card-lbl">Novillas</div>
+    </div>
+
+    <div class="dash-card dash-card-blue">
+      <svg class="dash-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- número total / conteo -->
+        <circle cx="32" cy="32" r="20" fill="#3b82f6" opacity=".2"/>
+        <circle cx="32" cy="32" r="14" fill="#2563eb" opacity=".3"/>
+        <!-- símbolo suma/total -->
+        <path d="M24 20 L24 32 L36 26 L24 32 L24 44" stroke="#1d4ed8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="44" cy="20" r="3" fill="#60a5fa" opacity=".7"/>
+        <circle cx="44" cy="44" r="3" fill="#60a5fa" opacity=".7"/>
+      </svg>
+      <div class="dash-card-val" id="dash-total">—</div>
+      <div class="dash-card-lbl">Total animales</div>
+    </div>
+
+  </div>
+
+  <!-- Sección LECHE -->
+  <div class="dash-section-label">🥛 PRODUCCIÓN</div>
+  <div class="dash-card-grid">
+
+    <div class="dash-card dash-card-blue" onclick="showSection('produccion',document.querySelector('.nav-btn:nth-child(4)'))">
+      <svg class="dash-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- sol -->
+        <circle cx="32" cy="32" r="10" fill="#fbbf24" opacity=".7"/>
+        <line x1="32" y1="16" x2="32" y2="20" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="32" y1="44" x2="32" y2="48" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="16" y1="32" x2="20" y2="32" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="44" y1="32" x2="48" y2="32" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- balde de leche -->
+        <path d="M24 36 L26 50 L38 50 L40 36Z" fill="#2563eb" opacity=".5"/>
+        <rect x="23" y="33" width="18" height="4" rx="2" fill="#1d4ed8" opacity=".6"/>
+        <path d="M27 33 Q32 28 37 33" stroke="#60a5fa" stroke-width="1.5" fill="none"/>
+        <!-- ondas leche -->
+        <path d="M27 42 Q30 40 33 42 Q36 44 39 42" stroke="#bfdbfe" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      </svg>
+      <div class="dash-card-val" id="dash-litros-hoy">— L</div>
+      <div class="dash-card-lbl">Litros hoy</div>
+    </div>
+
+    <div class="dash-card dash-card-green">
+      <svg class="dash-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- calendario con colones -->
+        <rect x="14" y="18" width="36" height="32" rx="5" fill="#16a34a" opacity=".3"/>
+        <rect x="14" y="18" width="36" height="10" rx="5 5 0 0" fill="#15803d" opacity=".5"/>
+        <rect x="16" y="20" width="10" height="6" rx="2" fill="#4ade80" opacity=".4"/>
+        <!-- símbolo colón ₡ -->
+        <text x="32" y="42" text-anchor="middle" font-size="16" fill="#15803d" font-weight="800" opacity=".8">₡</text>
+        <!-- líneas datos -->
+        <rect x="20" y="32" width="8" height="2" rx="1" fill="#15803d" opacity=".4"/>
+        <rect x="20" y="36" width="12" height="2" rx="1" fill="#15803d" opacity=".4"/>
+      </svg>
+      <div class="dash-card-val" id="dash-litros-mes">— L</div>
+      <div class="dash-card-lbl">Litros este mes</div>
+    </div>
+
+  </div>
+
+  <!-- Gráfico producción -->
   <div class="chart-wrap">
     <div class="chart-title">Producción últimos 7 días (litros)</div>
     <div class="bar-chart" style="height:120px" id="main-chart"></div>
   </div>
+
+  <!-- Top 5 -->
   <div class="chart-wrap">
     <div class="chart-title">Top 5 vacas productoras hoy</div>
     <div id="top5"></div>
   </div>
+
 </div>
 
 <!-- ===== HATO ===== -->
@@ -372,98 +617,60 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 <!-- ===== REPORTES ===== -->
 <div class="section" id="sec-reportes">
   <div class="section-title">Exportar informes</div>
-
-  <!-- Estado -->
   <div style="background:var(--accent-light);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
     <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0"></div>
     <div>
-      <div style="font-size:13px;font-weight:500;color:var(--accent-text)">Datos guardados localmente</div>
-      <div style="font-size:11px;color:var(--accent-text2)">Funciona sin internet. Exportá para compartir o archivar.</div>
+      <div style="font-size:13px;font-weight:500;color:var(--accent-text)" id="sync-status-txt">Datos sincronizados en Firebase</div>
+      <div style="font-size:11px;color:var(--accent-text2)">Sincronización en tiempo real con todos los dispositivos de la familia.</div>
     </div>
   </div>
-
-  <!-- Exportar todo -->
   <div class="report-card">
     <div class="report-card-title">📦 Reporte completo</div>
-    <div class="report-card-desc">Todas las secciones (Hato, Leche, Entregas, Veterinaria y Bajas) en un solo archivo.</div>
+    <div class="report-card-desc">Todas las secciones en un solo archivo.</div>
     <div class="export-row">
       <button class="btn btn-excel" onclick="exportExcel('todo')">⬇ Excel (CSV)</button>
       <button class="btn btn-pdf" onclick="exportPDF('todo')">⬇ PDF</button>
     </div>
   </div>
-
-  <!-- Hato -->
   <div class="report-card">
     <div class="report-card-title">🐄 Hato</div>
-    <div class="report-card-desc">Registro completo de animales: nombre, arete, estado, producción y datos reproductivos.</div>
+    <div class="report-card-desc">Registro completo de animales.</div>
     <div class="export-row">
       <button class="btn btn-excel" onclick="exportExcel('hato')">⬇ Excel (CSV)</button>
       <button class="btn btn-pdf" onclick="exportPDF('hato')">⬇ PDF</button>
     </div>
   </div>
-
-  <!-- Leche -->
   <div class="report-card">
     <div class="report-card-title">🥛 Registro de leche</div>
-    <div class="report-card-desc">Registros de ordeño por vaca con fecha, litros y observaciones.</div>
+    <div class="report-card-desc">Registros de ordeño por vaca.</div>
     <div class="export-row">
       <button class="btn btn-excel" onclick="exportExcel('leche')">⬇ Excel (CSV)</button>
       <button class="btn btn-pdf" onclick="exportPDF('leche')">⬇ PDF</button>
     </div>
   </div>
-
-  <!-- Entregas -->
   <div class="report-card">
     <div class="report-card-title">🚚 Entregas diarias</div>
-    <div class="report-card-desc">Historial de entregas de leche con precio, destino y total en colones.</div>
+    <div class="report-card-desc">Historial de entregas con precio y total.</div>
     <div class="export-row">
       <button class="btn btn-excel" onclick="exportExcel('entregas')">⬇ Excel (CSV)</button>
       <button class="btn btn-pdf" onclick="exportPDF('entregas')">⬇ PDF</button>
     </div>
   </div>
-
-  <!-- Veterinaria -->
   <div class="report-card">
     <div class="report-card-title">💉 Veterinaria</div>
-    <div class="report-card-desc">Historial de medicamentos, vacunas y tratamientos aplicados al hato.</div>
+    <div class="report-card-desc">Historial de medicamentos y tratamientos.</div>
     <div class="export-row">
       <button class="btn btn-excel" onclick="exportExcel('vet')">⬇ Excel (CSV)</button>
       <button class="btn btn-pdf" onclick="exportPDF('vet')">⬇ PDF</button>
     </div>
   </div>
-
-  <!-- Bajas -->
   <div class="report-card">
     <div class="report-card-title">📋 Bajas</div>
-    <div class="report-card-desc">Registro de animales dados de baja con motivo, fecha y observaciones.</div>
+    <div class="report-card-desc">Animales dados de baja.</div>
     <div class="export-row">
       <button class="btn btn-excel" onclick="exportExcel('bajas')">⬇ Excel (CSV)</button>
       <button class="btn btn-pdf" onclick="exportPDF('bajas')">⬇ PDF</button>
     </div>
-  </div>
-
-  <div style="height:1px;background:var(--color-border-tertiary);margin:16px 0"></div>
-  <div class="section-title">Gestión de datos</div>
-
-  <div class="report-card">
-    <div class="report-card-title">Respaldo JSON</div>
-    <div class="report-card-desc">Descarga todos los registros en formato JSON para restaurarlos en otro dispositivo.</div>
-    <div class="export-row"><button class="btn btn-backup" onclick="exportJSON()">Descargar respaldo JSON</button></div>
-  </div>
-  <div class="report-card">
-    <div class="report-card-title">Importar datos</div>
-    <div class="report-card-desc">Restaura un respaldo JSON previamente exportado.</div>
-    <div class="export-row">
-      <label class="btn btn-backup" style="cursor:pointer">
-        Cargar archivo JSON
-        <input type="file" accept=".json" style="display:none" onchange="importJSON(this)">
-      </label>
-    </div>
-  </div>
-  <div class="report-card">
-    <div class="report-card-title">Limpiar todos los datos</div>
-    <div class="report-card-desc">Borra todos los registros y reinicia la app. ¡No se puede deshacer!</div>
-    <div class="export-row"><button class="btn btn-danger" onclick="clearAllData()">Borrar todo</button></div>
   </div>
 </div>
 
@@ -481,10 +688,35 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
   </div>
 </div>
 
+<!-- User menu -->
+<div class="modal-bg" id="modal-user">
+  <div class="modal" style="max-width:300px;text-align:center">
+    <div id="user-modal-avatar-wrap" style="margin-bottom:12px"></div>
+    <div class="user-menu-name" id="user-modal-name">—</div>
+    <div class="user-menu-email" id="user-modal-email">—</div>
+    <div style="height:0.5px;background:var(--color-border-tertiary);margin-bottom:16px"></div>
+    <button class="btn btn-danger" style="width:100%;justify-content:center" onclick="signOutUser()">Cerrar sesión</button>
+    <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="closeModal('modal-user')">Cancelar</button>
+  </div>
+</div>
+
 <!-- Agregar vaca -->
 <div class="modal-bg" id="modal-addcow">
   <div class="modal">
     <div class="modal-title">Agregar animal al hato</div>
+
+    <!-- FOTO DEL ANIMAL -->
+    <div class="form-group">
+      <label class="form-label">Foto del animal</label>
+      <div class="photo-picker" onclick="document.getElementById('new-foto-input').click()">
+        <div id="new-foto-preview" class="photo-preview-empty">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span>Tomar foto o elegir de galería</span>
+        </div>
+      </div>
+      <input type="file" id="new-foto-input" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this)">
+    </div>
+
     <div class="form-row">
       <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="new-name" placeholder="Ej: Lucera"></div>
       <div class="form-group"><label class="form-label">Arete / ID</label><input class="form-input" id="new-arete" placeholder="Ej: CR-2045"></div>
@@ -503,7 +735,6 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Peso (kg)</label><input class="form-input" type="number" id="new-peso" placeholder="Ej: 450"></div>
-      <!-- *** NUEVO: campo Producción *** -->
       <div class="form-group"><label class="form-label">Producción (L/día)</label><input class="form-input" type="number" id="new-produccion" placeholder="Ej: 18" step="0.1" min="0"></div>
     </div>
     <div class="form-group"><label class="form-label">Observaciones</label><input class="form-input" id="new-obs" placeholder="Notas adicionales"></div>
@@ -585,18 +816,39 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
   </div>
 </div>
 
-<!-- ===== MODAL CONFIGURACIÓN ===== -->
+<!-- Configuración -->
 <div class="modal-bg" id="modal-config">
   <div class="modal">
     <div class="modal-title">⚙️ Configuración</div>
 
-    <!-- Nombre finca -->
+    <!-- INFO DE LA FINCA -->
+    <div style="font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">📋 Información de la finca</div>
     <div class="form-group">
       <label class="form-label">Nombre de la finca</label>
       <input class="form-input" id="cfg-nombre" placeholder="Ej: Finca Santa Rosa">
     </div>
+    <div class="form-group">
+      <label class="form-label">Propietario</label>
+      <input class="form-input" id="cfg-propietario" placeholder="Ej: Walter Gutiérrez e Hijos">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">N° de Finca</label>
+        <input class="form-input" id="cfg-nfinca" placeholder="Ej: 2-345678-000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Hectáreas</label>
+        <input class="form-input" type="number" id="cfg-hectareas" placeholder="Ej: 45.5" step="0.1" min="0">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Ubicación / Distrito</label>
+      <input class="form-input" id="cfg-ubicacion" placeholder="Ej: Cuesta del Rancho, Pérez Zeledón">
+    </div>
 
-    <!-- Tema -->
+    <div style="height:0.5px;background:var(--color-border-tertiary);margin:14px 0"></div>
+    <div style="font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">🎨 Apariencia</div>
+
     <div class="form-group">
       <label class="form-label" style="margin-bottom:8px">Tema de color</label>
       <div class="theme-grid">
@@ -618,8 +870,6 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
         </div>
       </div>
     </div>
-
-    <!-- Tamaño de letra -->
     <div class="form-group">
       <label class="form-label" style="margin-bottom:8px">Tamaño de letra</label>
       <div class="font-size-row">
@@ -628,7 +878,6 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
         <button class="font-opt" id="fo-grande" style="font-size:15px" onclick="selectFontSize('grande')">Grande</button>
       </div>
     </div>
-
     <div class="row" style="justify-content:flex-end;margin-top:8px;margin-bottom:0">
       <button class="btn" onclick="closeModal('modal-config')">Cancelar</button>
       <button class="btn btn-primary" onclick="saveConfig()">Guardar</button>
@@ -638,276 +887,261 @@ body{display:flex;justify-content:center;align-items:flex-start;padding:env(safe
 
 </div><!-- /app -->
 
-<script>
-/* ====================================================
-   CONFIGURACIÓN (tema, nombre, fuente)
-==================================================== */
-var CFG_KEY = 'finca-config';
-var appConfig = {nombre:'Finca Santa Rosa', tema:'verde', fuente:'normal'};
+<!-- ===== FIREBASE SDK ===== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, collection, onSnapshot, setDoc, addDoc, deleteDoc, updateDoc, getDocs }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-function loadConfig(){
-  try{
-    var raw=localStorage.getItem(CFG_KEY);
-    if(raw) appConfig=Object.assign(appConfig,JSON.parse(raw));
-  }catch(e){}
+const firebaseConfig = {
+  apiKey: "AIzaSyAISQ_p-BFAS4zdvYKSlAMUGf84cGfEQLM",
+  authDomain: "wg-e-hijos.firebaseapp.com",
+  projectId: "wg-e-hijos",
+  storageBucket: "wg-e-hijos.firebasestorage.app",
+  messagingSenderId: "972914678626",
+  appId: "1:972914678626:web:3206b02c754ab3ab486a3b"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+// ── Referencia global a listeners para limpiarlos al cerrar sesión
+let unsubListeners = [];
+let currentUser = null;
+
+// ── Exponer funciones al scope global (para onclick en HTML)
+window.signInWithGoogle = async function() {
+  document.getElementById('login-loading').style.display='block';
+  try {
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    document.getElementById('login-loading').style.display='none';
+    alert('Error al iniciar sesión: ' + e.message);
+  }
+};
+
+window.signOutUser = async function() {
+  unsubListeners.forEach(u => u());
+  unsubListeners = [];
+  await signOut(auth);
+  closeModal('modal-user');
+  // Limpiar datos en memoria
+  cows=[]; lecheReg=[]; vetReg=[]; bajas=[]; entregas=[];
+};
+
+// ── Auth state
+onAuthStateChanged(auth, user => {
+  if (user) {
+    currentUser = user;
+    document.getElementById('login-screen').classList.add('hidden');
+    updateUserUI(user);
+    subscribeToData();
+    loadConfig();
+    applyConfig();
+    updateHeader();
+    checkInstallBanner();
+    var ef=document.getElementById('ent-fecha');
+    if(ef) ef.value=new Date().toISOString().split('T')[0];
+  } else {
+    currentUser = null;
+    document.getElementById('login-screen').classList.remove('hidden');
+    document.getElementById('login-loading').style.display='none';
+  }
+});
+
+function updateUserUI(user) {
+  // Header avatar
+  var wrap = document.getElementById('user-avatar-wrap');
+  if (user.photoURL) {
+    wrap.innerHTML = '<img class="user-avatar" src="'+user.photoURL+'" alt="'+user.displayName+'" onclick="openModal(\'modal-user\')">';
+  } else {
+    var initials = (user.displayName||user.email||'?').charAt(0).toUpperCase();
+    wrap.innerHTML = '<div class="user-avatar-placeholder" onclick="openModal(\'modal-user\')">'+initials+'</div>';
+  }
+  // User modal
+  var mWrap = document.getElementById('user-modal-avatar-wrap');
+  if (user.photoURL) {
+    mWrap.innerHTML = '<img class="user-menu-avatar" src="'+user.photoURL+'">';
+  } else {
+    var init2 = (user.displayName||user.email||'?').charAt(0).toUpperCase();
+    mWrap.innerHTML = '<div class="user-menu-avatar-ph">'+init2+'</div>';
+  }
+  document.getElementById('user-modal-name').textContent = user.displayName || 'Usuario';
+  document.getElementById('user-modal-email').textContent = user.email || '';
 }
 
+// ── Colecciones Firestore
+function col(name) { return collection(db, 'finca', 'datos', name); }
+function docRef(name, id) { return doc(db, 'finca', 'datos', name, String(id)); }
+
+// ── Sync en tiempo real — subscriptions
+function subscribeToData() {
+  setSyncBadge('syncing', 'Sincronizando…');
+
+  const subs = [
+    onSnapshot(col('cows'), snap => {
+      cows = snap.docs.map(d => ({id: d.id, ...d.data()}));
+      renderCows(); renderMainDash();
+    }),
+    onSnapshot(col('lecheReg'), snap => {
+      lecheReg = snap.docs.map(d => ({...d.data()})).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+      renderLeche();
+    }),
+    onSnapshot(col('vetReg'), snap => {
+      vetReg = snap.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+      renderVet();
+    }),
+    onSnapshot(col('bajas'), snap => {
+      bajas = snap.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+      renderBajas();
+    }),
+    onSnapshot(col('entregas'), snap => {
+      entregas = snap.docs.map(d => ({...d.data(), id: d.id})).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+      updateProdMetrics(); renderEntregaTable();
+      renderBarChart('prod-main-chart',entregas.slice(0,7).map(e=>e.litros).reverse(),entregas.slice(0,7).map(e=>e.fecha.slice(5)).reverse(),'var(--accent)',130,true);
+      renderTrend(); renderMainDash();
+      setSyncBadge('ok', 'En línea');
+    }, err => {
+      setSyncBadge('error', 'Error');
+    })
+  ];
+  unsubListeners.push(...subs);
+}
+
+function setSyncBadge(state, txt) {
+  var b = document.getElementById('sync-badge');
+  var t = document.getElementById('sync-txt');
+  b.className = state === 'syncing' ? 'syncing' : state === 'error' ? 'error' : '';
+  b.id = 'sync-badge';
+  t.textContent = txt;
+}
+
+// ── Guardar datos en Firestore (reemplaza saveAll)
+window.saveAll = function() { /* No-op: usamos Firestore directamente */ };
+
+window.fbAddCow = async function(cow) {
+  setSyncBadge('syncing','Guardando…');
+  var id = String(Date.now());
+  cow.id = id;
+  await setDoc(docRef('cows', id), cow);
+};
+window.fbUpdateCow = async function(cow) {
+  await setDoc(docRef('cows', String(cow.id)), cow);
+};
+window.fbDeleteCow = async function(id) {
+  await deleteDoc(docRef('cows', String(id)));
+};
+window.fbAddLeche = async function(reg) {
+  setSyncBadge('syncing','Guardando…');
+  await addDoc(col('lecheReg'), reg);
+};
+window.fbAddVet = async function(reg) {
+  setSyncBadge('syncing','Guardando…');
+  await addDoc(col('vetReg'), reg);
+};
+window.fbDeleteVet = async function(id) {
+  await deleteDoc(docRef('vetReg', id));
+};
+window.fbAddBaja = async function(reg) {
+  setSyncBadge('syncing','Guardando…');
+  await addDoc(col('bajas'), reg);
+};
+window.fbAddEntrega = async function(reg) {
+  setSyncBadge('syncing','Guardando…');
+  var id = String(Date.now());
+  reg.id = id;
+  await setDoc(docRef('entregas', id), reg);
+};
+window.fbDeleteEntrega = async function(id) {
+  await deleteDoc(docRef('entregas', String(id)));
+};
+window.fbUpdateCowBaja = async function(cowName) {
+  // Marcar vaca como baja
+  var cowsSnap = await getDocs(col('cows'));
+  cowsSnap.forEach(async d => {
+    if(d.data().name === cowName) {
+      await updateDoc(doc(db, 'finca','datos','cows', d.id), {estado:'Baja'});
+    }
+  });
+};
+
+// Datos de ejemplo para primera vez (solo si la colección está vacía)
+window.seedIfEmpty = async function() {
+  var snap = await getDocs(col('cows'));
+  if(!snap.empty) return;
+  var DEFAULTS_COWS = [
+    {name:'Lucera',arete:'CR-1021',tipo:'Vaca',raza:'Jersey',estado:'Activa',litros:18.5,produccion:18,partos:3,peso:390,nacimiento:'2020-05-12',ultparto:'2025-11-03',obs:'Excelente productora'},
+    {name:'Princesa',arete:'CR-1045',tipo:'Vaca',raza:'Holstein',estado:'Lactante',litros:22.0,produccion:22,partos:4,peso:510,nacimiento:'2019-08-20',ultparto:'2025-09-15',obs:''},
+    {name:'Bella',arete:'CR-1067',tipo:'Vaca',raza:'Pardo Suizo',estado:'Preñada',litros:14.0,produccion:14,partos:2,peso:440,nacimiento:'2021-03-01',ultparto:'2025-03-01',obs:'Parto esperado mayo 2026'},
+    {name:'Mora',arete:'CR-1089',tipo:'Vaca',raza:'Jersey',estado:'Activa',litros:16.5,produccion:16,partos:1,peso:360,nacimiento:'2022-07-14',ultparto:'2025-12-20',obs:''},
+    {name:'Estrella',arete:'CR-1102',tipo:'Vaca',raza:'Holstein',estado:'Seca',litros:0,produccion:0,partos:5,peso:530,nacimiento:'2018-02-28',ultparto:'2025-08-10',obs:'En período seco'},
+    {name:'Don Fuerte',arete:'CR-0010',tipo:'Toro',raza:'Brahman',estado:'Otro',litros:0,produccion:0,partos:0,peso:780,nacimiento:'2017-11-05',ultparto:'',obs:'Reproductor principal'}
+  ];
+  for(var c of DEFAULTS_COWS) {
+    var id = String(Date.now() + Math.random());
+    c.id = id;
+    await setDoc(docRef('cows', id), c);
+  }
+};
+</script>
+
+<script>
+/* ====================================================
+   DATOS EN MEMORIA (se llenan desde Firestore)
+==================================================== */
+var cows=[], lecheReg=[], vetReg=[], bajas=[], entregas=[];
+
+/* ====================================================
+   CONFIGURACIÓN (tema, nombre, fuente) — sigue en localStorage
+==================================================== */
+var CFG_KEY = 'finca-config';
+var appConfig = {nombre:'Finca Santa Rosa', tema:'verde', fuente:'normal', propietario:'', nfinca:'', hectareas:'', ubicacion:''};
+
+function loadConfig(){
+  try{var raw=localStorage.getItem(CFG_KEY);if(raw)appConfig=Object.assign(appConfig,JSON.parse(raw));}catch(e){}
+}
 function saveConfig(){
   appConfig.nombre = document.getElementById('cfg-nombre').value.trim()||'Finca Santa Rosa';
+  appConfig.propietario = document.getElementById('cfg-propietario').value.trim();
+  appConfig.nfinca = document.getElementById('cfg-nfinca').value.trim();
+  appConfig.hectareas = document.getElementById('cfg-hectareas').value.trim();
+  appConfig.ubicacion = document.getElementById('cfg-ubicacion').value.trim();
   localStorage.setItem(CFG_KEY, JSON.stringify(appConfig));
   applyConfig();
   closeModal('modal-config');
   showToast('','Configuración guardada','Los cambios se aplicaron correctamente.');
 }
-
 function applyConfig(){
-  /* Nombre */
   var n=appConfig.nombre;
   document.title=n;
   var el=document.getElementById('hdr-name');if(el)el.textContent=n;
   var pt=document.getElementById('page-title');if(pt)pt.textContent=n;
-  /* Tema */
+  // Saludo en tablero
+  var dn=document.getElementById('dash-finca-nombre');if(dn)dn.textContent=n;
   document.documentElement.className='';
   if(appConfig.tema!=='verde') document.documentElement.classList.add('tema-'+appConfig.tema);
   document.querySelector('meta[name="theme-color"]').setAttribute('content',
     {verde:'#1D9E75',azul:'#2563EB',cafe:'#92400E',oscuro:'#1C1C1E'}[appConfig.tema]||'#1D9E75');
-  /* Fuente */
   var sz={pequena:'11px',normal:'13px',grande:'15px'}[appConfig.fuente]||'13px';
   document.documentElement.style.setProperty('--base-font',sz);
-  /* Sync UI del modal */
+  // Sync UI del modal config
   document.getElementById('cfg-nombre').value=appConfig.nombre;
-  ['verde','azul','cafe','oscuro'].forEach(t=>{
-    var sw=document.getElementById('sw-'+t);
-    if(sw) sw.classList.toggle('selected',appConfig.tema===t);
-  });
-  ['pequena','normal','grande'].forEach(f=>{
-    var fo=document.getElementById('fo-'+f);
-    if(fo) fo.classList.toggle('selected',appConfig.fuente===f);
-  });
+  var p=document.getElementById('cfg-propietario');if(p)p.value=appConfig.propietario||'';
+  var nf=document.getElementById('cfg-nfinca');if(nf)nf.value=appConfig.nfinca||'';
+  var ha=document.getElementById('cfg-hectareas');if(ha)ha.value=appConfig.hectareas||'';
+  var ub=document.getElementById('cfg-ubicacion');if(ub)ub.value=appConfig.ubicacion||'';
+  ['verde','azul','cafe','oscuro'].forEach(t=>{var sw=document.getElementById('sw-'+t);if(sw)sw.classList.toggle('selected',appConfig.tema===t);});
+  ['pequena','normal','grande'].forEach(f=>{var fo=document.getElementById('fo-'+f);if(fo)fo.classList.toggle('selected',appConfig.fuente===f);});
 }
-
 function selectTheme(t){ appConfig.tema=t; applyConfig(); }
 function selectFontSize(f){ appConfig.fuente=f; applyConfig(); }
 
 /* ====================================================
-   DATOS INICIALES
-==================================================== */
-var DEFAULTS = {
-  cows:[
-    {id:1,name:'Lucera',arete:'CR-1021',tipo:'Vaca',raza:'Jersey',estado:'Activa',litros:18.5,produccion:18,partos:3,peso:390,nacimiento:'2020-05-12',ultparto:'2025-11-03',obs:'Excelente productora'},
-    {id:2,name:'Princesa',arete:'CR-1045',tipo:'Vaca',raza:'Holstein',estado:'Lactante',litros:22.0,produccion:22,partos:4,peso:510,nacimiento:'2019-08-20',ultparto:'2025-09-15',obs:''},
-    {id:3,name:'Bella',arete:'CR-1067',tipo:'Vaca',raza:'Pardo Suizo',estado:'Preñada',litros:14.0,produccion:14,partos:2,peso:440,nacimiento:'2021-03-01',ultparto:'2025-03-01',obs:'Parto esperado mayo 2026'},
-    {id:4,name:'Mora',arete:'CR-1089',tipo:'Vaca',raza:'Jersey',estado:'Activa',litros:16.5,produccion:16,partos:1,peso:360,nacimiento:'2022-07-14',ultparto:'2025-12-20',obs:''},
-    {id:5,name:'Estrella',arete:'CR-1102',tipo:'Vaca',raza:'Holstein',estado:'Seca',litros:0,produccion:0,partos:5,peso:530,nacimiento:'2018-02-28',ultparto:'2025-08-10',obs:'En período seco'},
-    {id:6,name:'Don Fuerte',arete:'CR-0010',tipo:'Toro',raza:'Brahman',estado:'Otro',litros:0,produccion:0,partos:0,peso:780,nacimiento:'2017-11-05',ultparto:'',obs:'Reproductor principal'}
-  ],
-  lecheReg:[
-    {vaca:'Lucera',litros:18.5,fecha:'2026-03-26',obs:''},
-    {vaca:'Princesa',litros:22.0,fecha:'2026-03-26',obs:'Producción alta'},
-    {vaca:'Mora',litros:16.5,fecha:'2026-03-26',obs:''}
-  ],
-  vetReg:[
-    {animal:'Bella',tipo:'Hormona',med:'Oxitocina 5ml + Calcio IV',motivo:'Preparación parto',fecha:'2026-03-20',dosis:'5 ml',via:'IV',proxdosis:'',doctor:'Dr. Fallas'},
-    {animal:'Estrella',tipo:'Antibiótico',med:'Penicilina',motivo:'Mastitis subclínica',fecha:'2026-03-18',dosis:'10 ml',via:'IM',proxdosis:'2026-03-25',doctor:'Dr. Fallas'},
-    {animal:'Todo el Hato',tipo:'Antiparasitario',med:'Ivermectina',motivo:'Desparasitación semestral',fecha:'2026-03-10',dosis:'1 ml/50kg',via:'SC',proxdosis:'2026-09-10',doctor:'Dr. Mora'}
-  ],
-  bajas:[],
-  entregas:[
-    {id:1,fecha:'2026-03-26',litros:487,destino:'Dos Pinos',precio:350,obs:'',total:170450},
-    {id:2,fecha:'2026-03-25',litros:495,destino:'Dos Pinos',precio:350,obs:'',total:173250},
-    {id:3,fecha:'2026-03-24',litros:478,destino:'Dos Pinos',precio:350,obs:'',total:167300},
-    {id:4,fecha:'2026-03-23',litros:489,destino:'Dos Pinos',precio:350,obs:'',total:171150},
-    {id:5,fecha:'2026-03-22',litros:451,destino:'Dos Pinos',precio:350,obs:'Leche parcial, rechazo 12L por acidez',total:157850},
-    {id:6,fecha:'2026-03-21',litros:472,destino:'Dos Pinos',precio:350,obs:'',total:165200},
-    {id:7,fecha:'2026-03-20',litros:460,destino:'Dos Pinos',precio:350,obs:'',total:161000}
-  ]
-};
-
-/* ====================================================
-   PERSISTENCIA localStorage
-==================================================== */
-var STORAGE_KEY='finca-santa-rosa-data';
-var cows=JSON.parse(JSON.stringify(DEFAULTS.cows));
-var lecheReg=JSON.parse(JSON.stringify(DEFAULTS.lecheReg));
-var vetReg=JSON.parse(JSON.stringify(DEFAULTS.vetReg));
-var bajas=[];
-var entregas=JSON.parse(JSON.stringify(DEFAULTS.entregas));
-
-function saveAll(){
-  try{localStorage.setItem(STORAGE_KEY,JSON.stringify({cows,lecheReg,vetReg,bajas,entregas}));}catch(e){}
-}
-function loadAll(){
-  try{
-    var raw=localStorage.getItem(STORAGE_KEY);
-    if(raw){
-      var d=JSON.parse(raw);
-      cows=d.cows||DEFAULTS.cows;
-      lecheReg=d.lecheReg||DEFAULTS.lecheReg;
-      vetReg=d.vetReg||DEFAULTS.vetReg;
-      bajas=d.bajas||DEFAULTS.bajas;
-      entregas=d.entregas||DEFAULTS.entregas;
-    }
-  }catch(e){}
-}
-
-function exportJSON(){
-  var data=JSON.stringify({cows,lecheReg,vetReg,bajas,entregas},null,2);
-  downloadBlob(data,'application/json','finca-respaldo-'+today()+'.json');
-  showToast('','Respaldo exportado','Archivo JSON descargado.');
-}
-function importJSON(input){
-  var file=input.files[0];if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      var d=JSON.parse(e.target.result);
-      if(!d.cows)throw new Error();
-      cows=d.cows;lecheReg=d.lecheReg||[];vetReg=d.vetReg||[];bajas=d.bajas||[];entregas=d.entregas||[];
-      saveAll();renderAll();
-      showToast('','Datos restaurados','Los registros fueron cargados correctamente.');
-    }catch(err){showToast('','Error al importar','El archivo no es válido o está corrupto.');}
-  };
-  reader.readAsText(file);
-}
-function clearAllData(){
-  if(!confirm('¿Estás seguro? Se borrarán TODOS los registros.'))return;
-  cows=JSON.parse(JSON.stringify(DEFAULTS.cows));
-  lecheReg=JSON.parse(JSON.stringify(DEFAULTS.lecheReg));
-  vetReg=JSON.parse(JSON.stringify(DEFAULTS.vetReg));
-  bajas=[];entregas=JSON.parse(JSON.stringify(DEFAULTS.entregas));
-  saveAll();renderAll();
-  showToast('','Datos reiniciados','Se cargaron los datos de ejemplo.');
-}
-
-/* ====================================================
-   EXPORTAR EXCEL (CSV)
-==================================================== */
-function toCSV(headers,rows){
-  var bom='\uFEFF'; // BOM para que Excel abra con tildes correctas
-  var lines=[headers.join(',')].concat(rows.map(r=>r.map(c=>{
-    var s=String(c==null?'':c).replace(/"/g,'""');
-    return /[,"\n]/.test(s)?'"'+s+'"':s;
-  }).join(',')));
-  return bom+lines.join('\r\n');
-}
-
-function downloadBlob(content,type,filename){
-  var blob=new Blob([content],{type});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;a.download=filename;a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
-function today(){return new Date().toISOString().slice(0,10);}
-
-function exportExcel(sec){
-  var fn=appConfig.nombre.replace(/\s+/g,'_');
-  var csv='';
-
-  if(sec==='hato'||sec==='todo'){
-    var h=['Nombre','Arete','Tipo','Raza','Estado','Producción (L/día)','Litros hoy','Partos','Peso (kg)','Nacimiento','Último parto','Observaciones'];
-    var r=cows.map(c=>[c.name,c.arete,c.tipo,c.raza,c.estado,c.produccion||0,c.litros||0,c.partos,c.peso,c.nacimiento,c.ultparto,c.obs]);
-    if(sec==='hato'){csv=toCSV(h,r);downloadBlob(csv,'text/csv',fn+'_hato_'+today()+'.csv');showToast('','Excel exportado','Hato descargado como CSV.');return;}
-    csv+='HATO\r\n'+toCSV(h,r)+'\r\n\r\n';
-  }
-  if(sec==='leche'||sec==='todo'){
-    var h=['Vaca','Litros','Fecha','Observaciones'];
-    var r=lecheReg.map(x=>[x.vaca,x.litros,x.fecha,x.obs]);
-    if(sec==='leche'){csv=toCSV(h,r);downloadBlob(csv,'text/csv',fn+'_leche_'+today()+'.csv');showToast('','Excel exportado','Leche descargado como CSV.');return;}
-    csv+='REGISTRO DE LECHE\r\n'+toCSV(h,r)+'\r\n\r\n';
-  }
-  if(sec==='entregas'||sec==='todo'){
-    var h=['Fecha','Litros','Destino','Precio/L (₡)','Total (₡)','Observaciones'];
-    var r=entregas.map(e=>[e.fecha,e.litros,e.destino,e.precio,e.total,e.obs]);
-    if(sec==='entregas'){csv=toCSV(h,r);downloadBlob(csv,'text/csv',fn+'_entregas_'+today()+'.csv');showToast('','Excel exportado','Entregas descargado como CSV.');return;}
-    csv+='ENTREGAS DIARIAS\r\n'+toCSV(h,r)+'\r\n\r\n';
-  }
-  if(sec==='vet'||sec==='todo'){
-    var h=['Animal','Tipo','Medicamento','Motivo','Fecha','Dosis','Vía','Próxima dosis','Veterinario'];
-    var r=vetReg.map(v=>[v.animal,v.tipo,v.med,v.motivo,v.fecha,v.dosis,v.via,v.proxdosis,v.doctor]);
-    if(sec==='vet'){csv=toCSV(h,r);downloadBlob(csv,'text/csv',fn+'_veterinaria_'+today()+'.csv');showToast('','Excel exportado','Veterinaria descargado como CSV.');return;}
-    csv+='VETERINARIA\r\n'+toCSV(h,r)+'\r\n\r\n';
-  }
-  if(sec==='bajas'||sec==='todo'){
-    var h=['Animal','Motivo','Fecha','Observaciones'];
-    var r=bajas.map(b=>[b.vaca,b.motivo,b.fecha,b.obs]);
-    if(sec==='bajas'){csv=toCSV(h,r);downloadBlob(csv,'text/csv',fn+'_bajas_'+today()+'.csv');showToast('','Excel exportado','Bajas descargado como CSV.');return;}
-    csv+='BAJAS\r\n'+toCSV(h,r)+'\r\n\r\n';
-  }
-  if(sec==='todo'){
-    downloadBlob(csv,'text/csv',fn+'_completo_'+today()+'.csv');
-    showToast('','Excel exportado','Reporte completo descargado como CSV. Ábrelo en Excel o Google Sheets.');
-  }
-}
-
-/* ====================================================
-   EXPORTAR PDF (ventana de impresión)
-==================================================== */
-function exportPDF(sec){
-  var fn=appConfig.nombre;
-  var ts=new Date().toLocaleDateString('es-CR');
-  var color='#1D9E75';
-  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+fn+' — '+sec+'</title>';
-  html+='<style>body{font-family:Arial,sans-serif;font-size:12px;color:#1a1916;padding:24px}';
-  html+='h1{font-size:18px;color:'+color+';margin-bottom:4px}';
-  html+='.sub{font-size:11px;color:#706f6b;margin-bottom:20px}';
-  html+='h2{font-size:14px;color:'+color+';margin:20px 0 8px;border-bottom:1px solid #e3e2de;padding-bottom:4px}';
-  html+='table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:11px}';
-  html+='th{background:'+color+';color:#fff;padding:6px 8px;text-align:left;font-weight:500}';
-  html+='td{padding:5px 8px;border-bottom:0.5px solid #e3e2de}';
-  html+='tr:nth-child(even) td{background:#f5f5f3}';
-  html+='@media print{body{padding:0}button{display:none}}';
-  html+='</style></head><body>';
-  html+='<h1>'+fn+'</h1><div class="sub">Generado el '+ts+'</div>';
-
-  function tbl(title,headers,rows){
-    var s='<h2>'+title+'</h2><table><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>';
-    s+=rows.map(r=>'<tr>'+r.map(c=>'<td>'+(c==null?'—':c)+'</td>').join('')+'</tr>').join('');
-    return s+'</tbody></table>';
-  }
-
-  if(sec==='hato'||sec==='todo'){
-    html+=tbl('🐄 Hato',
-      ['Nombre','Arete','Tipo','Raza','Estado','Producción (L/día)','Partos','Peso','Nacimiento'],
-      cows.map(c=>[c.name,c.arete,c.tipo,c.raza,c.estado,(c.produccion||0)+' L/día',c.partos,(c.peso||'—')+' kg',c.nacimiento||'—'])
-    );
-  }
-  if(sec==='leche'||sec==='todo'){
-    html+=tbl('🥛 Registro de leche',
-      ['Vaca','Litros','Fecha','Observaciones'],
-      lecheReg.map(x=>[x.vaca,x.litros+' L',x.fecha,x.obs||'—'])
-    );
-  }
-  if(sec==='entregas'||sec==='todo'){
-    html+=tbl('🚚 Entregas diarias',
-      ['Fecha','Litros','Destino','Precio/L','Total'],
-      entregas.map(e=>[e.fecha,e.litros+' L',e.destino||'—',e.precio?'₡'+e.precio:'—',e.total?'₡'+e.total.toLocaleString():'—'])
-    );
-  }
-  if(sec==='vet'||sec==='todo'){
-    html+=tbl('💉 Veterinaria',
-      ['Animal','Tipo','Medicamento','Motivo','Fecha','Dosis','Vía','Próxima dosis'],
-      vetReg.map(v=>[v.animal,v.tipo,v.med,v.motivo,v.fecha,v.dosis,v.via,v.proxdosis||'—'])
-    );
-  }
-  if(sec==='bajas'||sec==='todo'){
-    html+=tbl('📋 Bajas',
-      ['Animal','Motivo','Fecha','Observaciones'],
-      bajas.map(b=>[b.vaca,b.motivo,b.fecha,b.obs||'—'])
-    );
-    if(!bajas.length) html+='<p style="color:#706f6b;font-size:12px">No hay bajas registradas.</p>';
-  }
-
-  html+='</body></html>';
-  var w=window.open('','_blank','width=800,height=600');
-  w.document.write(html);
-  w.document.close();
-  w.onload=function(){w.focus();w.print();};
-}
-
-/* ====================================================
-   DATOS DE GRÁFICOS ESTÁTICOS
+   DATOS GRÁFICOS ESTÁTICOS
 ==================================================== */
 var prod30vals=Array.from({length:30},(_,i)=>Math.round(445+Math.sin(i/3)*25+15));
 var prod12m=[13800,14200,13500,14800,15200,14600,14100,13900,14300,14700,14500,14610];
@@ -962,41 +1196,50 @@ function renderMainDash(){
   var sorted=[...cows].filter(c=>c.litros>0).sort((a,b)=>b.litros-a.litros).slice(0,5);
   var maxL=sorted[0]?sorted[0].litros:1;
   document.getElementById('top5').innerHTML=sorted.map(c=>'<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span style="font-weight:500;color:var(--color-text-primary)">'+c.name+'</span><span style="color:var(--color-text-secondary)">'+c.litros.toFixed(1)+' L</span></div><div style="background:var(--color-background-secondary);border-radius:99px;height:6px"><div style="width:'+Math.round(c.litros/maxL*100)+'%;background:var(--accent);height:6px;border-radius:99px"></div></div></div>').join('');
-  var activas=cows.filter(c=>c.estado!=='Baja').length;
+  var activas=cows.filter(c=>c.estado==='Activa').length;
   var secas=cows.filter(c=>c.estado==='Seca').length;
   var prenadas=cows.filter(c=>c.estado==='Preñada').length;
+  var lactantes=cows.filter(c=>c.estado==='Lactante').length;
+  var novillas=cows.filter(c=>c.tipo==='Novilla').length;
+  var total=cows.filter(c=>c.estado!=='Baja').length;
   var hoy=entregas[0]?entregas[0].litros:0;
+  var mesTotal=entregas.reduce((a,e)=>a+e.litros,0);
   var el;
   el=document.getElementById('dash-activas');if(el)el.textContent=activas;
   el=document.getElementById('dash-secas');if(el)el.textContent=secas;
   el=document.getElementById('dash-prenadas');if(el)el.textContent=prenadas;
+  el=document.getElementById('dash-lactantes');if(el)el.textContent=lactantes;
+  el=document.getElementById('dash-novillas');if(el)el.textContent=novillas;
+  el=document.getElementById('dash-total');if(el)el.textContent=total;
   el=document.getElementById('dash-hoy');if(el)el.textContent=hoy;
+  el=document.getElementById('dash-litros-hoy');if(el)el.textContent=hoy+' L';
+  el=document.getElementById('dash-litros-mes');if(el)el.textContent=mesTotal.toLocaleString()+' L';
+  // Saludo turno en tablero
+  var dt=document.getElementById('dash-fecha-turno');
+  if(dt){var now=new Date();var dias=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];var meses=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];var h=now.getHours();var turno=h<12?'☀️ Ordeño matutino':h<18?'🌤 Ordeño vespertino':'🌙 Cierre del día';dt.textContent=dias[now.getDay()]+' '+now.getDate()+' '+meses[now.getMonth()]+' · '+turno;}
 }
 
 /* ====================================================
-   HATO — con campo Producción
+   HATO
 ==================================================== */
 function renderCows(filter){
   var list=cows.filter(c=>c.estado!=='Baja'&&(!filter||c.name.toLowerCase().includes(filter.toLowerCase())||c.arete.toLowerCase().includes(filter.toLowerCase())));
   document.getElementById('cow-grid').innerHTML=list.map(c=>{
-    var prodChip=c.produccion>0
-      ? '<div class="prod-chip">🥛 '+c.produccion.toFixed(1)+' L/día</div>'
-      : '';
-    return '<div class="cow-card" onclick="showCow('+c.id+')">'
-      +'<div class="cow-header"><div class="cow-avatar">🐄</div><div><div class="cow-name">'+c.name+'</div><div class="cow-arete">'+c.arete+' · '+c.tipo+'</div></div></div>'
-      +'<div style="margin-bottom:4px"><span class="badge '+badgeClass[c.estado]+'">'+c.estado+'</span></div>'
-      +prodChip
-      +'<div class="cow-stat" style="margin-top:6px">'+c.raza+' <span>'+(c.litros>0?c.litros.toFixed(1)+' L hoy':'—')+'</span></div>'
-      +'</div>';
+    var prodChip=c.produccion>0?'<div class="prod-chip">🥛 '+c.produccion.toFixed(1)+' L/día</div>':'';
+    var fotoHtml=c.foto?'<img class="cow-photo" src="'+c.foto+'" alt="'+c.name+'">':'';
+    return '<div class="cow-card" onclick="showCow(\''+c.id+'\')">'+fotoHtml+'<div class="cow-header"><div class="cow-avatar">🐄</div><div><div class="cow-name">'+c.name+'</div><div class="cow-arete">'+c.arete+' · '+c.tipo+'</div></div></div><div style="margin-bottom:4px"><span class="badge '+(badgeClass[c.estado]||'badge-otro')+'">'+c.estado+'</span></div>'+prodChip+'<div class="cow-stat" style="margin-top:6px">'+c.raza+' <span>'+(c.litros>0?c.litros.toFixed(1)+' L hoy':'—')+'</span></div></div>';
   }).join('');
 }
 function filterCows(v){renderCows(v)}
 
 function showCow(id){
-  var c=cows.find(x=>x.id===id);
+  var c=cows.find(x=>x.id===id||String(x.id)===String(id));
+  if(!c)return;
+  var fotoHtml=c.foto?'<img class="cow-detail-photo" src="'+c.foto+'" alt="'+c.name+'">':'';
   document.getElementById('cowdetail-content').innerHTML=
+    fotoHtml+
     '<div class="modal-title" style="display:flex;align-items:center;gap:10px"><div class="cow-avatar" style="width:44px;height:44px;font-size:22px">🐄</div>'+c.name+'</div>'+
-    [['Arete',c.arete],['Tipo',c.tipo],['Raza',c.raza],['Estado','<span class="badge '+badgeClass[c.estado]+'">'+c.estado+'</span>'],
+    [['Arete',c.arete],['Tipo',c.tipo],['Raza',c.raza],['Estado','<span class="badge '+(badgeClass[c.estado]||'badge-otro')+'">'+c.estado+'</span>'],
      ['Producción',c.produccion>0?c.produccion+' L/día':'—'],
      ['Nacimiento',c.nacimiento||'—'],['Peso',c.peso?c.peso+' kg':'—'],['N° partos',c.partos],['Último parto',c.ultparto||'—']]
     .map(r=>'<div class="detail-row"><span class="detail-key">'+r[0]+'</span><span class="detail-val">'+r[1]+'</span></div>').join('')+
@@ -1044,7 +1287,7 @@ function updateProdMetrics(){
   el=document.getElementById('hdr-total');if(el)el.textContent=hoy+' L';
 }
 function renderEntregaTable(){
-  var rows=entregas.map(e=>'<tr><td>'+e.fecha+'</td><td style="font-weight:500">'+e.litros+' L</td><td>'+(e.destino||'—')+'</td><td>'+(e.precio?'₡'+e.precio.toLocaleString():'—')+'</td><td>'+(e.total?'₡'+e.total.toLocaleString():'—')+'</td><td style="color:var(--color-text-secondary);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(e.obs||'—')+'</td><td><button class="delete-btn" onclick="deleteEntrega('+e.id+')">Eliminar</button></td></tr>').join('');
+  var rows=entregas.map(e=>'<tr><td>'+e.fecha+'</td><td style="font-weight:500">'+e.litros+' L</td><td>'+(e.destino||'—')+'</td><td>'+(e.precio?'₡'+e.precio.toLocaleString():'—')+'</td><td>'+(e.total?'₡'+e.total.toLocaleString():'—')+'</td><td style="color:var(--color-text-secondary);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(e.obs||'—')+'</td><td><button class="delete-btn" onclick="deleteEntrega(\''+e.id+'\')">Eliminar</button></td></tr>').join('');
   document.getElementById('entrega-table').innerHTML='<thead><tr><th>Fecha</th><th>Litros</th><th>Destino</th><th>Precio/L</th><th>Total</th><th>Obs.</th><th></th></tr></thead><tbody>'+rows+'</tbody>';
   var el=document.getElementById('entrega-count');if(el)el.textContent=entregas.length+' registros';
 }
@@ -1071,40 +1314,6 @@ function switchProdTab(range,btn){
   }
   renderTrend();
 }
-function saveEntrega(){
-  var fecha=document.getElementById('ent-fecha').value;
-  var litros=parseFloat(document.getElementById('ent-litros').value);
-  var destino=document.getElementById('ent-destino').value;
-  var precio=parseFloat(document.getElementById('ent-precio').value)||0;
-  var obs=document.getElementById('ent-obs').value.trim();
-  if(!fecha){showToast('','Falta fecha','Por favor selecciona la fecha de entrega.');return;}
-  if(!litros||litros<=0){showToast('','Litros inválidos','Por favor ingresa una cantidad válida de litros.');return;}
-  var total=precio?Math.round(litros*precio):0;
-  entregas.unshift({id:Date.now(),fecha,litros,destino,precio,obs,total});
-  document.getElementById('ent-litros').value='';
-  document.getElementById('ent-destino').value='';
-  document.getElementById('ent-precio').value='';
-  document.getElementById('ent-obs').value='';
-  document.getElementById('ent-total-preview').textContent='';
-  saveAll();updateProdMetrics();renderEntregaTable();
-  switchProdTab('7d',document.querySelector('.tab-btn'));
-  showToast('','Entrega registrada','Se guardaron '+litros+' L del '+fecha+(destino?' para '+destino:'')+'.'+(total?' Total: ₡'+total.toLocaleString():''));
-}
-function deleteEntrega(id){
-  entregas=entregas.filter(e=>e.id!==id);
-  saveAll();updateProdMetrics();renderEntregaTable();
-  switchProdTab('7d',document.querySelector('.tab-btn'));
-}
-
-document.addEventListener('input',function(e){
-  if(e.target.id==='ent-litros'||e.target.id==='ent-precio'){
-    var l=parseFloat(document.getElementById('ent-litros').value)||0;
-    var p=parseFloat(document.getElementById('ent-precio').value)||0;
-    var el=document.getElementById('ent-total-preview');
-    if(l&&p)el.textContent='Total estimado: ₡'+(l*p).toLocaleString('es-CR');
-    else el.textContent='';
-  }
-});
 
 /* ====================================================
    MODALS Y FORMS
@@ -1128,12 +1337,32 @@ function showToast(icon,title,msg){
   openModal('modal-toast');
 }
 
-function addCow(){
+/* ====================================================
+   FOTO DE ANIMAL
+==================================================== */
+var nuevaFotoBase64 = null;
+
+function previewFoto(input){
+  var file=input.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    nuevaFotoBase64=e.target.result;
+    var prev=document.getElementById('new-foto-preview');
+    prev.innerHTML='<img class="photo-preview-img" src="'+nuevaFotoBase64+'" alt="Foto animal"><div style="font-size:11px;color:var(--color-text-secondary);margin-top:6px;text-align:center">Toca para cambiar</div>';
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ====================================================
+   CRUD — con Firestore
+==================================================== */
+async function addCow(){
   var name=document.getElementById('new-name').value.trim();
   var arete=document.getElementById('new-arete').value.trim();
   if(!name||!arete){alert('Nombre y arete son requeridos');return;}
-  cows.push({
-    id:Date.now(),name,arete,
+  var cow={
+    name,arete,
     tipo:document.getElementById('new-tipo').value,
     raza:document.getElementById('new-raza').value,
     estado:document.getElementById('new-estado').value,
@@ -1143,47 +1372,121 @@ function addCow(){
     peso:parseFloat(document.getElementById('new-peso').value)||0,
     nacimiento:document.getElementById('new-nacimiento').value,
     ultparto:document.getElementById('new-ultparto').value,
-    obs:document.getElementById('new-obs').value
-  });
+    obs:document.getElementById('new-obs').value,
+    foto:nuevaFotoBase64||''
+  };
   closeModal('modal-addcow');
   ['new-name','new-arete','new-partos','new-peso','new-produccion','new-obs','new-nacimiento','new-ultparto'].forEach(id=>{var e=document.getElementById(id);if(e)e.value='';});
-  saveAll();renderCows();renderMainDash();
+  // Reset foto
+  nuevaFotoBase64=null;
+  var prev=document.getElementById('new-foto-preview');
+  if(prev)prev.innerHTML='<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Tomar foto o elegir de galería</span>';
+  document.getElementById('new-foto-input').value='';
+  await window.fbAddCow(cow);
+  showToast('🐄','Animal agregado',name+' fue añadido al hato.');
 }
 
-function saveLeche(){
+async function saveLeche(){
   var litros=parseFloat(document.getElementById('leche-litros').value);
   if(!litros){alert('Ingrese los litros');return;}
-  lecheReg.unshift({vaca:document.getElementById('leche-vaca').value,litros,fecha:document.getElementById('leche-fecha').value,obs:document.getElementById('leche-obs').value});
+  var reg={vaca:document.getElementById('leche-vaca').value,litros,fecha:document.getElementById('leche-fecha').value,obs:document.getElementById('leche-obs').value};
   closeModal('modal-leche');
   document.getElementById('leche-litros').value='';
   document.getElementById('leche-obs').value='';
-  saveAll();renderLeche();
+  await window.fbAddLeche(reg);
 }
 
-function saveVet(){
+async function saveVet(){
   var med=document.getElementById('vet-med').value.trim();
   if(!med){alert('Ingrese el medicamento');return;}
-  vetReg.unshift({animal:document.getElementById('vet-vaca').value==='__hato__'?'Todo el Hato':document.getElementById('vet-vaca').value,tipo:document.getElementById('vet-tipo').value,med,motivo:document.getElementById('vet-motivo').value,fecha:document.getElementById('vet-fecha').value,dosis:document.getElementById('vet-dosis').value,via:document.getElementById('vet-via').value,proxdosis:document.getElementById('vet-proxdosis').value,doctor:document.getElementById('vet-doctor').value});
+  var reg={animal:document.getElementById('vet-vaca').value==='__hato__'?'Todo el Hato':document.getElementById('vet-vaca').value,tipo:document.getElementById('vet-tipo').value,med,motivo:document.getElementById('vet-motivo').value,fecha:document.getElementById('vet-fecha').value,dosis:document.getElementById('vet-dosis').value,via:document.getElementById('vet-via').value,proxdosis:document.getElementById('vet-proxdosis').value,doctor:document.getElementById('vet-doctor').value};
   closeModal('modal-vet');
   ['vet-med','vet-motivo','vet-dosis','vet-doctor','vet-proxdosis'].forEach(id=>{var e=document.getElementById(id);if(e)e.value='';});
-  saveAll();renderVet();
+  await window.fbAddVet(reg);
 }
 
-function saveBaja(){
+async function saveBaja(){
   var vaca=document.getElementById('baja-vaca').value;
-  var cow=cows.find(c=>c.name===vaca);if(cow)cow.estado='Baja';
-  bajas.unshift({vaca,motivo:document.getElementById('baja-motivo').value,fecha:document.getElementById('baja-fecha').value,obs:document.getElementById('baja-obs').value});
-  closeModal('modal-baja');saveAll();renderBajas();renderCows();renderMainDash();
+  var reg={vaca,motivo:document.getElementById('baja-motivo').value,fecha:document.getElementById('baja-fecha').value,obs:document.getElementById('baja-obs').value};
+  closeModal('modal-baja');
+  await window.fbUpdateCowBaja(vaca);
+  await window.fbAddBaja(reg);
+}
+
+async function saveEntrega(){
+  var fecha=document.getElementById('ent-fecha').value;
+  var litros=parseFloat(document.getElementById('ent-litros').value);
+  var destino=document.getElementById('ent-destino').value;
+  var precio=parseFloat(document.getElementById('ent-precio').value)||0;
+  var obs=document.getElementById('ent-obs').value.trim();
+  if(!fecha){showToast('','Falta fecha','Por favor selecciona la fecha de entrega.');return;}
+  if(!litros||litros<=0){showToast('','Litros inválidos','Por favor ingresa una cantidad válida de litros.');return;}
+  var total=precio?Math.round(litros*precio):0;
+  var reg={fecha,litros,destino,precio,obs,total};
+  document.getElementById('ent-litros').value='';
+  document.getElementById('ent-destino').value='';
+  document.getElementById('ent-precio').value='';
+  document.getElementById('ent-obs').value='';
+  document.getElementById('ent-total-preview').textContent='';
+  await window.fbAddEntrega(reg);
+  showToast('','Entrega registrada','Se guardaron '+litros+' L del '+fecha+(destino?' para '+destino:'')+'.'+(total?' Total: ₡'+total.toLocaleString():''));
+}
+
+async function deleteEntrega(id){
+  await window.fbDeleteEntrega(id);
+}
+
+document.addEventListener('input',function(e){
+  if(e.target.id==='ent-litros'||e.target.id==='ent-precio'){
+    var l=parseFloat(document.getElementById('ent-litros').value)||0;
+    var p=parseFloat(document.getElementById('ent-precio').value)||0;
+    var el=document.getElementById('ent-total-preview');
+    if(l&&p)el.textContent='Total estimado: ₡'+(l*p).toLocaleString('es-CR');
+    else el.textContent='';
+  }
+});
+
+/* ====================================================
+   EXPORTAR EXCEL (CSV)
+==================================================== */
+function toCSV(headers,rows){
+  var bom='\uFEFF';
+  var lines=[headers.join(',')].concat(rows.map(r=>r.map(c=>{var s=String(c==null?'':c).replace(/"/g,'""');return /[,"\n]/.test(s)?'"'+s+'"':s;}).join(',')));
+  return bom+lines.join('\r\n');
+}
+function downloadBlob(content,type,filename){
+  var blob=new Blob([content],{type});var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=filename;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function today(){return new Date().toISOString().slice(0,10);}
+
+function exportExcel(sec){
+  var fn=appConfig.nombre.replace(/\s+/g,'_');var csv='';
+  if(sec==='hato'||sec==='todo'){var h=['Nombre','Arete','Tipo','Raza','Estado','Producción (L/día)','Litros hoy','Partos','Peso (kg)','Nacimiento','Último parto','Observaciones'];var r=cows.map(c=>[c.name,c.arete,c.tipo,c.raza,c.estado,c.produccion||0,c.litros||0,c.partos,c.peso,c.nacimiento,c.ultparto,c.obs]);if(sec==='hato'){csv=toCSV(h,r);downloadBlob(csv,'text/csv',fn+'_hato_'+today()+'.csv');showToast('','Excel exportado','Hato descargado.');return;}csv+='HATO\r\n'+toCSV(h,r)+'\r\n\r\n';}
+  if(sec==='leche'||sec==='todo'){var h=['Vaca','Litros','Fecha','Observaciones'];var r=lecheReg.map(x=>[x.vaca,x.litros,x.fecha,x.obs]);if(sec==='leche'){csv=toCSV(h,r);downloadBlob(csv,'text/csv',fn+'_leche_'+today()+'.csv');showToast('','Excel exportado','Leche descargado.');return;}csv+='REGISTRO DE LECHE\r\n'+toCSV(h,r)+'\r\n\r\n';}
+  if(sec==='entregas'||sec==='todo'){var h=['Fecha','Litros','Destino','Precio/L (₡)','Total (₡)','Observaciones'];var r=entregas.map(e=>[e.fecha,e.litros,e.destino,e.precio,e.total,e.obs]);if(sec==='entregas'){csv=toCSV(h,r);downloadBlob(csv,'text/csv',fn+'_entregas_'+today()+'.csv');showToast('','Excel exportado','Entregas descargado.');return;}csv+='ENTREGAS DIARIAS\r\n'+toCSV(h,r)+'\r\n\r\n';}
+  if(sec==='vet'||sec==='todo'){var h=['Animal','Tipo','Medicamento','Motivo','Fecha','Dosis','Vía','Próxima dosis','Veterinario'];var r=vetReg.map(v=>[v.animal,v.tipo,v.med,v.motivo,v.fecha,v.dosis,v.via,v.proxdosis,v.doctor]);if(sec==='vet'){csv=toCSV(h,r);downloadBlob(csv,'text/csv',fn+'_veterinaria_'+today()+'.csv');showToast('','Excel exportado','Veterinaria descargado.');return;}csv+='VETERINARIA\r\n'+toCSV(h,r)+'\r\n\r\n';}
+  if(sec==='bajas'||sec==='todo'){var h=['Animal','Motivo','Fecha','Observaciones'];var r=bajas.map(b=>[b.vaca,b.motivo,b.fecha,b.obs]);if(sec==='bajas'){csv=toCSV(h,r);downloadBlob(csv,'text/csv',fn+'_bajas_'+today()+'.csv');showToast('','Excel exportado','Bajas descargado.');return;}csv+='BAJAS\r\n'+toCSV(h,r)+'\r\n\r\n';}
+  if(sec==='todo'){downloadBlob(csv,'text/csv',fn+'_completo_'+today()+'.csv');showToast('','Excel exportado','Reporte completo descargado.');}
 }
 
 /* ====================================================
-   RENDER GLOBAL
+   EXPORTAR PDF
 ==================================================== */
-function renderAll(){
-  renderMainDash();renderCows();renderLeche();renderVet();renderBajas();
-  updateProdMetrics();renderEntregaTable();
-  renderBarChart('prod-main-chart',entregas.slice(0,7).map(e=>e.litros).reverse(),entregas.slice(0,7).map(e=>e.fecha.slice(5)).reverse(),'var(--accent)',130,true);
-  renderTrend();renderLineChart();
+function exportPDF(sec){
+  var fn=appConfig.nombre;var ts=new Date().toLocaleDateString('es-CR');var color='#1D9E75';
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+fn+' — '+sec+'</title>';
+  html+='<style>body{font-family:Arial,sans-serif;font-size:12px;color:#1a1916;padding:24px}h1{font-size:18px;color:'+color+';margin-bottom:4px}.sub{font-size:11px;color:#706f6b;margin-bottom:20px}h2{font-size:14px;color:'+color+';margin:20px 0 8px;border-bottom:1px solid #e3e2de;padding-bottom:4px}table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:11px}th{background:'+color+';color:#fff;padding:6px 8px;text-align:left;font-weight:500}td{padding:5px 8px;border-bottom:0.5px solid #e3e2de}tr:nth-child(even) td{background:#f5f5f3}@media print{body{padding:0}}</style></head><body>';
+  html+='<h1>'+fn+'</h1><div class="sub">Generado el '+ts+'</div>';
+  function tbl(title,headers,rows){var s='<h2>'+title+'</h2><table><thead><tr>'+headers.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>';s+=rows.map(r=>'<tr>'+r.map(c=>'<td>'+(c==null?'—':c)+'</td>').join('')+'</tr>').join('');return s+'</tbody></table>';}
+  if(sec==='hato'||sec==='todo'){html+=tbl('🐄 Hato',['Nombre','Arete','Tipo','Raza','Estado','Producción (L/día)','Partos','Peso','Nacimiento'],cows.map(c=>[c.name,c.arete,c.tipo,c.raza,c.estado,(c.produccion||0)+' L/día',c.partos,(c.peso||'—')+' kg',c.nacimiento||'—']));}
+  if(sec==='leche'||sec==='todo'){html+=tbl('🥛 Registro de leche',['Vaca','Litros','Fecha','Observaciones'],lecheReg.map(x=>[x.vaca,x.litros+' L',x.fecha,x.obs||'—']));}
+  if(sec==='entregas'||sec==='todo'){html+=tbl('🚚 Entregas diarias',['Fecha','Litros','Destino','Precio/L','Total'],entregas.map(e=>[e.fecha,e.litros+' L',e.destino||'—',e.precio?'₡'+e.precio:'—',e.total?'₡'+e.total.toLocaleString():'—']));}
+  if(sec==='vet'||sec==='todo'){html+=tbl('💉 Veterinaria',['Animal','Tipo','Medicamento','Motivo','Fecha','Dosis','Vía','Próxima dosis'],vetReg.map(v=>[v.animal,v.tipo,v.med,v.motivo,v.fecha,v.dosis,v.via,v.proxdosis||'—']));}
+  if(sec==='bajas'||sec==='todo'){html+=tbl('📋 Bajas',['Animal','Motivo','Fecha','Observaciones'],bajas.map(b=>[b.vaca,b.motivo,b.fecha,b.obs||'—']));if(!bajas.length)html+='<p style="color:#706f6b;font-size:12px">No hay bajas registradas.</p>';}
+  html+='</body></html>';
+  var w=window.open('','_blank','width=800,height=600');w.document.write(html);w.document.close();w.onload=function(){w.focus();w.print();};
 }
 
 /* ====================================================
@@ -1221,16 +1524,14 @@ function checkInstallBanner(){
 }
 
 /* ====================================================
-   INIT
+   RENDER GLOBAL (para después del login)
 ==================================================== */
-loadConfig();
-loadAll();
-applyConfig();
-updateHeader();
-renderAll();
-checkInstallBanner();
-var ef=document.getElementById('ent-fecha');
-if(ef)ef.value=new Date().toISOString().split('T')[0];
+function renderAll(){
+  renderMainDash();renderCows();renderLeche();renderVet();renderBajas();
+  updateProdMetrics();renderEntregaTable();
+  renderBarChart('prod-main-chart',entregas.slice(0,7).map(e=>e.litros).reverse(),entregas.slice(0,7).map(e=>e.fecha.slice(5)).reverse(),'var(--accent)',130,true);
+  renderTrend();renderLineChart();
+}
 </script>
 </body>
 </html>

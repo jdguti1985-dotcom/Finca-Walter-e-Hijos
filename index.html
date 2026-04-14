@@ -627,36 +627,14 @@
         <div class="section-title" style="margin:0">🐣 Registro de partos y nacimientos</div>
         <button class="btn btn-primary" style="font-size:12px;padding:7px 12px" onclick="openModal('modal-parto')">+ Registrar</button>
       </div>
-
-      <!-- Resumen rápido -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
-        <div class="dash-kpi dash-kpi-green" id="parto-cnt-normal">
-          <div class="dash-kpi-val" id="parto-n-normal">0</div>
-          <div class="dash-kpi-lbl">Normales</div>
-        </div>
-        <div class="dash-kpi dash-kpi-amber" id="parto-cnt-dificil">
-          <div class="dash-kpi-val" id="parto-n-dificil">0</div>
-          <div class="dash-kpi-lbl">Difíciles / Cesárea</div>
-        </div>
-        <div class="dash-kpi dash-kpi-teal">
-          <div class="dash-kpi-val" id="parto-n-hembras">0</div>
-          <div class="dash-kpi-lbl">Hembras nac.</div>
-        </div>
-        <div class="dash-kpi dash-kpi-blue">
-          <div class="dash-kpi-val" id="parto-n-machos">0</div>
-          <div class="dash-kpi-lbl">Machos nac.</div>
-        </div>
-        <div class="dash-kpi" style="border-left:3px solid #7C3AED">
-          <div class="dash-kpi-val" style="color:#7C3AED" id="parto-n-abortos">0</div>
-          <div class="dash-kpi-lbl">Abortos</div>
-        </div>
-        <div class="dash-kpi dash-kpi-amber">
-          <div class="dash-kpi-val" id="parto-n-muertos">0</div>
-          <div class="dash-kpi-lbl">Nac. muertos</div>
-        </div>
+        <div class="dash-kpi dash-kpi-green"><div class="dash-kpi-val" id="parto-n-normal">0</div><div class="dash-kpi-lbl">Normales</div></div>
+        <div class="dash-kpi dash-kpi-amber"><div class="dash-kpi-val" id="parto-n-dificil">0</div><div class="dash-kpi-lbl">Difíciles/Cesárea</div></div>
+        <div class="dash-kpi dash-kpi-teal"><div class="dash-kpi-val" id="parto-n-hembras">0</div><div class="dash-kpi-lbl">Hembras nac.</div></div>
+        <div class="dash-kpi dash-kpi-blue"><div class="dash-kpi-val" id="parto-n-machos">0</div><div class="dash-kpi-lbl">Machos nac.</div></div>
+        <div class="dash-kpi" style="border-left:3px solid #7C3AED"><div class="dash-kpi-val" style="color:#7C3AED" id="parto-n-abortos">0</div><div class="dash-kpi-lbl">Abortos</div></div>
+        <div class="dash-kpi dash-kpi-amber"><div class="dash-kpi-val" id="parto-n-muertos">0</div><div class="dash-kpi-lbl">Nac. muertos</div></div>
       </div>
-
-      <!-- Historial completo -->
       <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:14px">
         <div style="font-size:13px;font-weight:600;color:var(--color-text-primary);margin-bottom:10px">Historial completo</div>
         <div id="partos-list-full"><div style="font-size:12px;color:var(--color-text-secondary);text-align:center;padding:16px">Sin partos registrados</div></div>
@@ -678,31 +656,26 @@
       <div style="background:var(--color-background-primary);border:1.5px solid var(--accent);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:14px">
         <div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px">💾 Copias de seguridad</div>
         <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:14px">Guarda o restaura todos los datos de la finca en tu iPhone.</div>
-
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-          <!-- Guardar backup -->
           <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;text-align:center;border:0.5px solid var(--color-border-tertiary)">
             <div style="font-size:22px;margin-bottom:6px">📲</div>
             <div style="font-size:12px;font-weight:600;color:var(--color-text-primary);margin-bottom:4px">Guardar en iPhone</div>
-            <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Descarga un archivo JSON con todos tus datos para guardarlo en iCloud o Files.</div>
+            <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Descarga un archivo JSON con todos tus datos para guardarlo en iCloud o Archivos.</div>
             <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:12px;padding:8px" onclick="backupToiPhone()">⬇ Descargar backup</button>
           </div>
-          <!-- Restaurar backup -->
           <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;text-align:center;border:0.5px solid var(--color-border-tertiary)">
             <div style="font-size:22px;margin-bottom:6px">🔄</div>
             <div style="font-size:12px;font-weight:600;color:var(--color-text-primary);margin-bottom:4px">Restaurar backup</div>
-            <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Carga un backup JSON previo y restaura todos los datos en Firebase.</div>
+            <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Carga un backup JSON previo y restaura los datos en Firebase.</div>
             <label class="btn" style="width:100%;justify-content:center;font-size:12px;padding:8px;cursor:pointer;background:#FCEBEB;color:#791F1F;border-color:#F09595">
               ⬆ Cargar backup
               <input type="file" id="restore-file-input" accept=".json" style="display:none" onchange="restoreFromBackup(this)">
             </label>
           </div>
         </div>
-
-        <!-- Restaurar desde Firebase -->
         <div style="border-top:0.5px solid var(--color-border-tertiary);padding-top:12px">
           <div style="font-size:12px;font-weight:600;color:var(--color-text-primary);margin-bottom:4px">☁️ Restaurar desde Firebase</div>
-          <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">Recarga todos los datos directamente desde la nube. Útil si algo no se ve correctamente.</div>
+          <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">Recarga todos los datos directamente desde la nube si algo no se ve correctamente.</div>
           <button class="btn" style="width:100%;justify-content:center;font-size:12px;background:#E3F0FB;color:#0C447C;border-color:#B5D4F4" onclick="restoreFromFirebase()">☁️ Recargar datos de Firebase</button>
         </div>
       </div>
@@ -978,7 +951,8 @@
 </div>
 
 
-import { getFirestore, doc, setDoc, updateDoc, deleteDoc, addDoc, collection, onSnapshot, query, orderBy, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<!-- Config modal -->
+<div class="modal-bg" id="modal-config">
   <div class="modal">
     <div class="modal-title">⚙️ Configuración</div>
     <div style="font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">📋 Información de la finca</div>
@@ -1930,60 +1904,44 @@ import { getFirestore, doc, setDoc, updateDoc, deleteDoc, addDoc, collection, on
 
   /* ===== BACKUP / RESTORE ===== */
   function backupToiPhone() {
-    var data = {
-      _version: 1,
-      _fecha: new Date().toISOString(),
-      _finca: appConfig.nombre,
-      cows: cows,
-      lecheReg: lecheReg,
-      vetReg: vetReg,
-      bajas: bajas,
-      entregas: entregas,
-      partos: partos
-    };
-    var json = JSON.stringify(data, null, 2);
-    var fname = (appConfig.nombre||'finca').replace(/\s+/g,'_') + '_backup_' + today() + '.json';
-    downloadBlob(json, 'application/json', fname);
-    showToast('📲','Backup descargado','Guarda el archivo en iCloud Drive o la app Archivos de tu iPhone para tenerlo seguro.');
+    var data = { _version:1, _fecha:new Date().toISOString(), _finca:appConfig.nombre,
+      cows:cows, lecheReg:lecheReg, vetReg:vetReg, bajas:bajas, entregas:entregas, partos:partos };
+    var fname = (appConfig.nombre||'finca').replace(/\s+/g,'_')+'_backup_'+today()+'.json';
+    downloadBlob(JSON.stringify(data,null,2),'application/json',fname);
+    showToast('📲','Backup descargado','Guarda el archivo en iCloud Drive o la app Archivos de tu iPhone.');
   }
 
   async function restoreFromBackup(input) {
-    var file = input.files[0];
-    if (!file) return;
+    var file = input.files[0]; if(!file) return;
     var reader = new FileReader();
     reader.onload = async function(e) {
       try {
         var data = JSON.parse(e.target.result);
-        if (!data.cows && !data._version) { showToast('❌','Archivo inválido','El archivo no parece ser un backup válido de esta app.'); return; }
-        if (!confirm('¿Restaurar todos los datos desde este backup?\n\nEsto reemplazará los datos actuales en Firebase. Esta acción no se puede deshacer.')) { input.value=''; return; }
+        if(!data.cows && !data._version) { showToast('❌','Archivo inválido','No parece ser un backup válido.'); return; }
+        if(!confirm('¿Restaurar todos los datos desde este backup?\n\nEsto enviará los datos a Firebase y reemplazará los actuales.')) { input.value=''; return; }
         setSyncBadge('syncing','Restaurando…');
         var ops = [];
-        // Subir cows
-        if (data.cows) for (var c of data.cows) { ops.push(window.fbUpdateCow ? window.fbUpdateCow(c) : Promise.resolve()); }
-        // Para colecciones simples usamos fbAdd funciones individuales
-        // Las entregas, vet, leche, bajas, partos las subimos con fbAddEntrega/fbAddVet etc.
-        // Primero mostramos un mensaje de progreso
+        if(data.cows) for(var c of data.cows) ops.push(window.fbUpdateCow(c));
         await Promise.allSettled(ops);
-        showToast('✅','Backup restaurado','Los datos del backup fueron enviados a Firebase. Los cambios aparecerán en unos segundos.');
         setSyncBadge('ok','En línea');
+        showToast('✅','Backup restaurado','Los datos fueron enviados a Firebase. Verás los cambios en unos segundos.');
       } catch(err) {
-        console.error('Restore error:', err);
-        showToast('❌','Error al restaurar','El archivo no pudo ser procesado. Verifica que sea un backup válido.');
+        console.error('Restore error:',err);
+        showToast('❌','Error al restaurar','Verifica que el archivo sea un backup válido.');
         setSyncBadge('error','Error');
       }
     };
     reader.readAsText(file);
-    input.value = '';
+    input.value='';
   }
 
   function restoreFromFirebase() {
-    if (!confirm('¿Recargar todos los datos desde Firebase?\n\nEsto actualizará la app con los datos más recientes de la nube.')) return;
+    if(!confirm('¿Recargar todos los datos desde Firebase?')) return;
     setSyncBadge('syncing','Recargando…');
-    // Las suscripciones de Firestore ya están activas — forzar re-render
     renderAll();
-    setTimeout(function() {
+    setTimeout(function(){
       setSyncBadge('ok','En línea');
-      showToast('☁️','Datos recargados','Los datos se han sincronizado con Firebase correctamente.');
+      showToast('☁️','Datos recargados','Los datos se sincronizaron con Firebase correctamente.');
     }, 1500);
   }
 
@@ -1991,58 +1949,41 @@ import { getFirestore, doc, setDoc, updateDoc, deleteDoc, addDoc, collection, on
   function renderPartosSection() {
     var resLabel = { normal:'✅ Normal', dificil:'⚠️ Difícil', aborto:'❌ Aborto', muerto:'💀 Nac. muerto', cesarea:'🏥 Cesárea' };
     var sexoLabel = { hembra:'Hembra 🐄', macho:'Macho 🐂' };
-
-    // Contadores
-    var nNormal   = partos.filter(p=>p.resultado==='normal').length;
-    var nDificil  = partos.filter(p=>p.resultado==='dificil'||p.resultado==='cesarea').length;
-    var nAborto   = partos.filter(p=>p.resultado==='aborto').length;
-    var nMuerto   = partos.filter(p=>p.resultado==='muerto').length;
-    var nHembras  = partos.filter(p=>p.sexo==='hembra').length;
-    var nMachos   = partos.filter(p=>p.sexo==='macho').length;
-
-    var s = function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
-    s('parto-n-normal', nNormal);
-    s('parto-n-dificil', nDificil);
-    s('parto-n-abortos', nAborto);
-    s('parto-n-muertos', nMuerto);
-    s('parto-n-hembras', nHembras);
-    s('parto-n-machos', nMachos);
-
-    // Lista completa
+    var s = function(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; };
+    s('parto-n-normal',  partos.filter(p=>p.resultado==='normal').length);
+    s('parto-n-dificil', partos.filter(p=>p.resultado==='dificil'||p.resultado==='cesarea').length);
+    s('parto-n-abortos', partos.filter(p=>p.resultado==='aborto').length);
+    s('parto-n-muertos', partos.filter(p=>p.resultado==='muerto').length);
+    s('parto-n-hembras', partos.filter(p=>p.sexo==='hembra').length);
+    s('parto-n-machos',  partos.filter(p=>p.sexo==='macho').length);
     var el = document.getElementById('partos-list-full');
-    if (!el) return;
-    if (!partos.length) {
-      el.innerHTML = '<div style="font-size:12px;color:var(--color-text-secondary);text-align:center;padding:16px">Sin partos registrados. Toca "+ Registrar" para agregar el primero.</div>';
-      return;
-    }
-    el.innerHTML = partos.map(function(p) {
-      var cls = 'parto-' + (p.resultado||'normal');
-      var sexoBadge = p.sexo ? ('<span style="display:inline-block;padding:1px 7px;border-radius:99px;font-size:10px;font-weight:600;background:'+(p.sexo==='hembra'?'#E3F0FB':'#EEEDFE')+';color:'+(p.sexo==='hembra'?'#0C447C':'#3C3489')+';margin-left:6px">'+(sexoLabel[p.sexo]||p.sexo)+'</span>') : '';
+    if(!el) return;
+    if(!partos.length) { el.innerHTML='<div style="font-size:12px;color:var(--color-text-secondary);text-align:center;padding:16px">Sin partos registrados. Toca "+ Registrar" para agregar el primero.</div>'; return; }
+    el.innerHTML = partos.map(function(p){
+      var cls='parto-'+(p.resultado||'normal');
+      var sexoBadge = p.sexo?('<span style="display:inline-block;padding:1px 7px;border-radius:99px;font-size:10px;font-weight:600;background:'+(p.sexo==='hembra'?'#E3F0FB':'#EEEDFE')+';color:'+(p.sexo==='hembra'?'#0C447C':'#3C3489')+';margin-left:6px">'+(sexoLabel[p.sexo]||p.sexo)+'</span>'):'';
       return '<div style="padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)">'
-        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">'
-        + '<div><span style="font-weight:600;font-size:13px;color:var(--color-text-primary)">🐄 '+(p.vaca||'—')+'</span>'+sexoBadge+'</div>'
-        + '<span class="parto-badge '+cls+'">'+(resLabel[p.resultado]||p.resultado||'—')+'</span>'
-        + '</div>'
-        + '<div style="font-size:11px;color:var(--color-text-secondary)">'
-        + p.fecha
-        + (p.pesoCria?' &nbsp;·&nbsp; Cría: '+p.pesoCria+' kg':'')
-        + (p.pesoMadre?' &nbsp;·&nbsp; Madre: '+p.pesoMadre+' kg':'')
-        + (p.atencion?' &nbsp;·&nbsp; '+p.atencion:'')
-        + '</div>'
-        + (p.obs?'<div style="font-size:11px;color:var(--color-text-secondary);margin-top:2px;font-style:italic">'+p.obs+'</div>':'')
-        + '</div>';
+        +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">'
+        +'<div><span style="font-weight:600;font-size:13px;color:var(--color-text-primary)">🐄 '+(p.vaca||'—')+'</span>'+sexoBadge+'</div>'
+        +'<span class="parto-badge '+cls+'">'+(resLabel[p.resultado]||p.resultado||'—')+'</span>'
+        +'</div>'
+        +'<div style="font-size:11px;color:var(--color-text-secondary)">'+p.fecha
+        +(p.pesoCria?' · Cría: '+p.pesoCria+' kg':'')
+        +(p.pesoMadre?' · Madre: '+p.pesoMadre+' kg':'')
+        +(p.atencion?' · '+p.atencion:'')+'</div>'
+        +(p.obs?'<div style="font-size:11px;color:var(--color-text-secondary);font-style:italic;margin-top:2px">'+p.obs+'</div>':'')
+        +'</div>';
     }).join('');
   }
 
-  /* ===== EXPORT PARTOS ===== */
+  /* ===== EXPORTAR PARTOS ===== */
   var _origExportExcel = exportExcel;
   exportExcel = function(sec) {
-    if (sec === 'partos') {
-      var fn = appConfig.nombre.replace(/\s+/g,'_');
-      var h = ['Vaca','Fecha','Resultado','Sexo cría','Peso cría (kg)','Peso madre (kg)','Atendido por','Observaciones'];
-      var r = partos.map(p=>[p.vaca,p.fecha,p.resultado,p.sexo||'',p.pesoCria||'',p.pesoMadre||'',p.atencion||'',p.obs||'']);
-      var csv = toCSV(h, r);
-      downloadBlob(csv, 'text/csv', fn+'_partos_'+today()+'.csv');
+    if(sec==='partos'){
+      var fn=appConfig.nombre.replace(/\s+/g,'_');
+      var h=['Vaca','Fecha','Resultado','Sexo cría','Peso cría (kg)','Peso madre (kg)','Atendido por','Observaciones'];
+      var r=partos.map(p=>[p.vaca,p.fecha,p.resultado,p.sexo||'',p.pesoCria||'',p.pesoMadre||'',p.atencion||'',p.obs||'']);
+      downloadBlob(toCSV(h,r),'text/csv',fn+'_partos_'+today()+'.csv');
       showToast('','Excel exportado','Partos descargado.');
       return;
     }
@@ -2050,33 +1991,27 @@ import { getFirestore, doc, setDoc, updateDoc, deleteDoc, addDoc, collection, on
   };
   var _origExportPDF = exportPDF;
   exportPDF = function(sec) {
-    if (sec === 'partos') {
-      var fn = appConfig.nombre; var ts = new Date().toLocaleDateString('es-CR'); var color = '#1D9E75';
-      var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+fn+' — Partos</title><style>body{font-family:Arial,sans-serif;font-size:12px;color:#1a1916;padding:24px}h1{font-size:18px;color:'+color+'}h2{font-size:14px;color:'+color+';margin:16px 0 6px;border-bottom:1px solid #e3e2de;padding-bottom:4px}table{width:100%;border-collapse:collapse;margin-bottom:16px}th{background:'+color+';color:#fff;padding:6px 8px;text-align:left}td{padding:5px 8px;border-bottom:0.5px solid #e3e2de}tr:nth-child(even) td{background:#f5f5f3}.sub{font-size:11px;color:#706f6b;margin-bottom:16px}</style></head><body>';
-      html += '<h1>'+fn+'</h1><div class="sub">Partos y nacimientos — Generado el '+ts+'</div>';
-      html += '<table><thead><tr><th>Vaca</th><th>Fecha</th><th>Resultado</th><th>Sexo cría</th><th>Peso cría</th><th>Peso madre</th><th>Atendido por</th><th>Observaciones</th></tr></thead><tbody>';
-      html += partos.map(p=>'<tr><td>'+p.vaca+'</td><td>'+p.fecha+'</td><td>'+p.resultado+'</td><td>'+(p.sexo||'—')+'</td><td>'+(p.pesoCria?p.pesoCria+' kg':'—')+'</td><td>'+(p.pesoMadre?p.pesoMadre+' kg':'—')+'</td><td>'+(p.atencion||'—')+'</td><td>'+(p.obs||'—')+'</td></tr>').join('');
-      html += '</tbody></table></body></html>';
-      if (!partos.length) html = html.replace('</tbody>','') + '<tr><td colspan="8" style="text-align:center;color:#706f6b">No hay partos registrados</td></tr></tbody>';
-      var w = window.open('','_blank','width=900,height=600'); w.document.write(html); w.document.close(); w.onload = function(){w.focus();w.print();};
+    if(sec==='partos'){
+      var fn=appConfig.nombre; var ts=new Date().toLocaleDateString('es-CR'); var color='#1D9E75';
+      var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+fn+' — Partos</title><style>body{font-family:Arial,sans-serif;font-size:12px;padding:24px}h1{color:'+color+'}h2{color:'+color+';border-bottom:1px solid #e3e2de;padding-bottom:4px}table{width:100%;border-collapse:collapse}th{background:'+color+';color:#fff;padding:6px 8px;text-align:left}td{padding:5px 8px;border-bottom:0.5px solid #e3e2de}tr:nth-child(even) td{background:#f5f5f3}.sub{font-size:11px;color:#706f6b;margin-bottom:16px}</style></head><body>';
+      html+='<h1>'+fn+'</h1><div class="sub">Partos y nacimientos — '+ts+'</div>';
+      html+='<h2>🐣 Partos registrados</h2><table><thead><tr><th>Vaca</th><th>Fecha</th><th>Resultado</th><th>Sexo</th><th>Peso cría</th><th>Peso madre</th><th>Atendido por</th><th>Obs.</th></tr></thead><tbody>';
+      if(!partos.length) html+='<tr><td colspan="8" style="text-align:center;color:#706f6b;padding:12px">No hay partos registrados</td></tr>';
+      else html+=partos.map(p=>'<tr><td>'+p.vaca+'</td><td>'+p.fecha+'</td><td>'+p.resultado+'</td><td>'+(p.sexo||'—')+'</td><td>'+(p.pesoCria?p.pesoCria+' kg':'—')+'</td><td>'+(p.pesoMadre?p.pesoMadre+' kg':'—')+'</td><td>'+(p.atencion||'—')+'</td><td>'+(p.obs||'—')+'</td></tr>').join('');
+      html+='</tbody></table></body></html>';
+      var w=window.open('','_blank','width=900,height=600'); w.document.write(html); w.document.close(); w.onload=function(){w.focus();w.print();};
       return;
     }
     _origExportPDF(sec);
   };
 
-  /* ===== RENDER ALL — extender para incluir partos section ===== */
+  /* ===== RENDER ALL — extender para sección partos ===== */
   var _origRenderAll = renderAll;
-  renderAll = function() {
-    _origRenderAll();
-    renderPartosSection();
-  };
+  renderAll = function() { _origRenderAll(); renderPartosSection(); };
 
-  /* ===== RENDER PARTOS — extender el original para también actualizar sección partos ===== */
+  /* ===== RENDER PARTOS — extender para también actualizar sección partos ===== */
   var _origRenderPartos = renderPartos;
-  renderPartos = function() {
-    _origRenderPartos();
-    renderPartosSection();
-  };
+  renderPartos = function() { _origRenderPartos(); renderPartosSection(); };
 
 
     var now=new Date();

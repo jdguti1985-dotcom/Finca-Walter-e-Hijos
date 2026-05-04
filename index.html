@@ -48,11 +48,19 @@
     }
 
     *,*::before,*::after { box-sizing:border-box; }
-    html { font-size:var(--base-font,13px); height:100%; overflow:hidden; }
-    body { background-color:#1D9E75; margin:0; display:flex; justify-content:center; height:100%; overflow:hidden; font-family:'Segoe UI',system-ui,sans-serif; font-size:var(--base-font,13px); }
+    html { font-size:var(--base-font,13px); }
+    body { background-color:#1D9E75; margin:0; padding:0; display:flex; justify-content:center; font-family:'Segoe UI',system-ui,sans-serif; font-size:var(--base-font,13px); min-height:100vh; }
 
     /* ===== APP SHELL ===== */
-    .app { width:100%; max-width:500px; background:var(--color-background-secondary); height:100vh; margin-top:0; border-radius:0; overflow:hidden; display:flex; flex-direction:column; position:relative; }
+    .app {
+      width:100%;
+      max-width:500px;
+      background:var(--color-background-secondary);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      position:relative;
+    }
     .hidden { display:none !important; }
 
     /* ===== LOGIN ===== */
@@ -83,20 +91,23 @@
     .user-avatar { width:30px; height:30px; border-radius:50%; object-fit:cover; cursor:pointer; border:1.5px solid rgba(255,255,255,.3); }
     .user-avatar-placeholder { width:30px; height:30px; border-radius:50%; background:var(--accent); color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer; }
 
-    /* ===== NAV — BARRA INFERIOR iOS ===== */
+    /* ===== NAV — FIJO AL FONDO (más confiable en iOS) ===== */
     .nav {
       background-color:var(--accent-nav,#2E5042);
       display:flex;
       justify-content:space-around;
-      padding:8px 4px calc(8px + env(safe-area-inset-bottom));
-      position:sticky;
+      padding:8px 4px;
+      padding-bottom:calc(8px + env(safe-area-inset-bottom, 0px));
+      position:fixed;
       bottom:0;
+      left:50%;
+      transform:translateX(-50%);
       width:100%;
-      z-index:100;
-      flex-shrink:0;
+      max-width:500px;
+      z-index:500;
       overflow-x:auto;
-      box-shadow:0 -2px 12px rgba(0,0,0,.25);
-      border-radius:0;
+      box-shadow:0 -2px 16px rgba(0,0,0,.35);
+      -webkit-tap-highlight-color:transparent;
     }
     .nav::-webkit-scrollbar { display:none; }
     .nav-btn {
@@ -116,6 +127,7 @@
       transition:color .15s, border-color .15s;
       white-space:nowrap;
       -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
     }
     .nav-btn.active { color:#fff; border-top-color:var(--accent,#1D9E75); }
     .nav-btn .nav-icon { font-size:20px; line-height:1; }
@@ -126,8 +138,9 @@
     .install-banner-close { background:none; border:none; cursor:pointer; color:var(--accent-text2,#6DCFB2); font-size:18px; }
 
     /* ===== CONTENT / SECTIONS ===== */
-    .content { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; min-height:0; }
-    .section { display:none; padding:14px 14px 110px; }
+    .content { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+    /* padding-bottom = altura del nav (~68px) + safe area + extra */
+    .section { display:none; padding:14px 14px calc(80px + env(safe-area-inset-bottom, 0px)); }
     .section.active { display:block; }
     .section-title { font-size:15px; font-weight:600; color:var(--color-text-primary); margin-bottom:12px; }
 
@@ -1190,40 +1203,106 @@
   function col(name) { return collection(db, 'finca', 'datos', name); }
   function docRef(name, id) { return doc(db, 'finca', 'datos', name, String(id)); }
 
+  // ── Colección raíz legacy (datos viejos en "Animales")
+  function colLegacy(name) { return collection(db, name); }
+
   function subscribeToData() {
     setSyncBadge('syncing', 'Sincronizando…');
-    const onErr = (col, err) => { console.warn('Firestore listener ['+col+'] error:', err.code, err.message); };
+    var algoDatos = false; // bandera: si algún listener responde, ponemos "En línea"
+
+    function markOnline() {
+      if (!algoDatos) { algoDatos = true; setSyncBadge('ok', 'En línea'); }
+    }
+
+    // Timeout: si en 30 segundos ningún listener responde → error visible
+    var timeoutId = setTimeout(function() {
+      if (!algoDatos) {
+        setSyncBadge('error', 'Sin conexión');
+        showToast('⚠️', 'Sin conexión a Firebase',
+          'Posible causa: el nuevo dominio jdguti1985-dotcom.github.io/Finca-WG-Hijos no está autorizado en Firebase → Authentication → Configuración → Dominios autorizados.');
+      }
+    }, 30000);
+
+    const onErr = function(colName, err) {
+      console.warn('Listener ['+colName+'] error:', err.code, err.message);
+      // Si TODOS fallan, mostrar error
+      setSyncBadge('error', 'Error: '+err.code);
+    };
+
     const subs = [
+      // ── Vacas en ruta nueva: finca/datos/cows
       onSnapshot(col('cows'),
-        snap => { cows = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderCows(); renderMainDash(); },
+        snap => {
+          var nuevas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          // Mezclar con vacas legacy sin duplicar
+          var idsNuevas = new Set(nuevas.map(c=>c.id));
+          cows = [...nuevas, ...cows.filter(c=>!idsNuevas.has(c.id))];
+          renderCows(); renderMainDash(); markOnline(); clearTimeout(timeoutId);
+        },
         err => onErr('cows', err)
       ),
+      // ── Vacas legacy: colección "Animales" en la raíz (datos viejos)
+      onSnapshot(colLegacy('Animales'),
+        snap => {
+          if (snap.empty) return;
+          var legacy = snap.docs.map(d => ({ id:'leg_'+d.id, ...d.data(),
+            // Mapear campos con nombre diferente
+            name: d.data().Nombre || d.data().name || '—',
+            arete: d.data()['Número de Arete'] || d.data().arete || '—',
+            tipo: d.data().Tipo || d.data().tipo || 'Vaca',
+            raza: d.data().Raza || d.data().raza || '—',
+            estado: d.data().Estado || d.data().estado || 'Activa',
+            partos: parseInt(d.data()['Número de parto']||d.data().partos||0),
+            peso: parseFloat(d.data().Peso||d.data().peso||0),
+            nacimiento: d.data()['Fecha de nacimiento']||d.data().nacimiento||'',
+            litros: 0, produccion: 0, foto: ''
+          }));
+          // Solo agregar las que NO están ya en la ruta nueva
+          var idsActuales = new Set(cows.filter(c=>!c.id.startsWith('leg_')).map(c=>c.arete));
+          var nuevasLegacy = legacy.filter(c=>!idsActuales.has(c.arete));
+          if (nuevasLegacy.length) {
+            cows = [...cows.filter(c=>!c.id.startsWith('leg_')), ...nuevasLegacy];
+            renderCows(); renderMainDash();
+          }
+          markOnline(); clearTimeout(timeoutId);
+        },
+        err => console.warn('Listener legacy [Animales]:', err.code)
+      ),
       onSnapshot(col('lecheReg'),
-        snap => { lecheReg = snap.docs.map(d => ({ ...d.data() })).sort((a, b) => b.fecha.localeCompare(a.fecha)); renderLeche(); },
+        snap => {
+          lecheReg = snap.docs.map(d => ({ ...d.data() })).sort((a, b) => (b.fecha||'').localeCompare(a.fecha||''));
+          renderLeche(); markOnline();
+        },
         err => onErr('lecheReg', err)
       ),
       onSnapshot(col('vetReg'),
-        snap => { vetReg = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => b.fecha.localeCompare(a.fecha)); renderVet(); },
+        snap => {
+          vetReg = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.fecha||'').localeCompare(a.fecha||''));
+          renderVet(); markOnline();
+        },
         err => onErr('vetReg', err)
       ),
       onSnapshot(col('bajas'),
-        snap => { bajas = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => b.fecha.localeCompare(a.fecha)); renderBajas(); },
+        snap => {
+          bajas = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.fecha||'').localeCompare(a.fecha||''));
+          renderBajas(); markOnline();
+        },
         err => onErr('bajas', err)
       ),
       onSnapshot(col('entregas'),
         snap => {
-          entregas = snap.docs.map(d => ({ ...d.data(), id: d.id })).sort((a, b) => b.fecha.localeCompare(a.fecha));
+          entregas = snap.docs.map(d => ({ ...d.data(), id: d.id })).sort((a, b) => (b.fecha||'').localeCompare(a.fecha||''));
           updateProdMetrics(); renderEntregaTable();
-          renderBarChart('prod-main-chart', entregas.slice(0,7).map(e=>e.litros).reverse(), entregas.slice(0,7).map(e=>e.fecha.slice(5)).reverse(), 'var(--accent)', 130, true);
-          renderTrend(); renderMainDash();
-          setSyncBadge('ok', 'En línea');
+          renderBarChart('prod-main-chart', entregas.slice(0,7).map(e=>e.litros).reverse(),
+            entregas.slice(0,7).map(e=>e.fecha.slice(5)).reverse(), 'var(--accent)', 130, true);
+          renderTrend(); renderMainDash(); markOnline(); clearTimeout(timeoutId);
         },
         err => { setSyncBadge('error', 'Error'); onErr('entregas', err); }
       ),
       onSnapshot(col('partos'),
         snap => {
-          partos = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => b.fecha.localeCompare(a.fecha));
-          renderPartos(); renderMainDash();
+          partos = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (b.fecha||'').localeCompare(a.fecha||''));
+          renderPartos(); renderMainDash(); markOnline();
         },
         err => onErr('partos', err)
       )
@@ -1338,7 +1417,7 @@
   function loadConfig() {
     try { var raw = localStorage.getItem(CFG_KEY); if (raw) appConfig = Object.assign(appConfig, JSON.parse(raw)); } catch(e){}
   }
-  function saveConfig() {
+  window.saveConfig = function saveConfig() {
     appConfig.nombre = document.getElementById('cfg-nombre').value.trim() || 'Finca Santa Rosa';
     appConfig.propietario = document.getElementById('cfg-propietario').value.trim();
     appConfig.nfinca = document.getElementById('cfg-nfinca').value.trim();
@@ -1370,30 +1449,28 @@
     ['verde','azul','cafe','oscuro'].forEach(t=>{ var sw=document.getElementById('sw-'+t); if(sw) sw.classList.toggle('selected',appConfig.tema===t); });
     ['pequena','normal','grande'].forEach(f=>{ var fo=document.getElementById('fo-'+f); if(fo) fo.classList.toggle('selected',appConfig.fuente===f); });
   }
-  function selectTheme(t) { appConfig.tema=t; applyConfig(); }
-  function selectFontSize(f) { appConfig.fuente=f; applyConfig(); }
+  window.selectTheme = function selectTheme(t) { appConfig.tema=t; applyConfig(); }
+  window.selectFontSize = function selectFontSize(f) { appConfig.fuente=f; applyConfig(); }
 
   /* ===== NAVEGACIÓN ===== */
-  function showSection(id, btn) {
-    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-    var sec = document.getElementById('sec-'+id);
-    if (sec) { sec.classList.add('active'); }
-    // Si no se pasó btn directamente, buscar el nav-btn que corresponde
-    if (btn) {
-      btn.classList.add('active');
-    } else {
-      // Buscar el botón del nav que corresponde a esta sección por su onclick
-      var navBtns = document.querySelectorAll('#main-nav .nav-btn');
-      navBtns.forEach(function(b) {
-        if (b.getAttribute('onclick') && b.getAttribute('onclick').indexOf("'"+id+"'") !== -1) {
-          b.classList.add('active');
-        }
-      });
-    }
-    // Scroll el área de contenido al tope al cambiar de sección
-    var content = document.querySelector('.content');
-    if (content) content.scrollTop = 0;
+  window.showSection = function showSection(id, btn) {
+    try {
+      document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+      document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+      var sec = document.getElementById('sec-'+id);
+      if (sec) { sec.classList.add('active'); }
+      if (btn) {
+        btn.classList.add('active');
+      } else {
+        document.querySelectorAll('#main-nav .nav-btn').forEach(function(b){
+          if (b.getAttribute('onclick') && b.getAttribute('onclick').indexOf("'"+id+"'") > -1) {
+            b.classList.add('active');
+          }
+        });
+      }
+      var content = document.querySelector('.content');
+      if (content) content.scrollTop = 0;
+    } catch(e) { console.error('showSection error:', e); }
   }
 
   /* ===== GRÁFICOS ===== */
@@ -1656,7 +1733,7 @@
       return '<div class="cow-card" onclick="showCow(\''+c.id+'\')">'+fotoHtml+'<div class="cow-header"><div class="cow-avatar">🐄</div><div><div class="cow-name">'+c.name+'</div><div class="cow-arete">'+c.arete+' · '+c.tipo+'</div></div></div><div style="margin-bottom:4px"><span class="badge '+(badgeClass[c.estado]||'badge-otro')+'">'+c.estado+'</span></div>'+prodChip+'<div class="cow-stat" style="margin-top:6px">'+c.raza+' <span>'+(c.litros>0?c.litros.toFixed(1)+' L hoy':'—')+'</span></div></div>';
     }).join('');
   }
-  function filterCows(v) { renderCows(v); }
+  window.filterCows = function filterCows(v) { renderCows(v); }
 
   function showCow(id) {
     var c=cows.find(x=>x.id===id||String(x.id)===String(id)); if(!c) return;
@@ -1754,8 +1831,8 @@
     var t=new Date().toISOString().split('T')[0];
     ['leche-fecha','vet-fecha','baja-fecha','ent-fecha','parto-fecha'].forEach(id=>{var x=document.getElementById(id); if(x&&!x.value) x.value=t;});
   }
-  function openModal(id) { populateSelects(); document.getElementById(id).classList.add('open'); }
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  window.openModal = function openModal(id) { populateSelects(); document.getElementById(id).classList.add('open'); }
+  window.closeModal = function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
   function showToast(icon, title, msg) {
     document.getElementById('toast-icon').textContent=icon||'';
@@ -1803,7 +1880,7 @@
   var currentCowId = null;
   var editFotoBase64 = null;
 
-  function openEditCow(id) {
+  window.openEditCow = function openEditCow(id) {
     var c = cows.find(x => x.id === id || String(x.id) === String(id));
     if (!c) return;
     currentCowId = c.id;
